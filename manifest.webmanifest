@@ -1,0 +1,22 @@
+{
+    "name": "Happy Birthday Aanyaaa ❤️",
+    "short_name": "For Aanyaaa",
+    "description": "A birthday website made with love by Akhil.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FFF8F6",
+    "theme_color": "#F43F5E",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
