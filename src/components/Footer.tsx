@@ -5,7 +5,7 @@ import { useRouter } from '@/lib/router';
 export function Footer() {
   const { navigate } = useRouter();
   return (
-    <footer className="relative mt-24 overflow-hidden bg-wine-700 text-cream-100">
+    <footer className="relative mt-6 overflow-hidden bg-wine-700 text-cream-100">
       <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-rose-500/20 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 rounded-full bg-gold-400/10 blur-3xl" />
 

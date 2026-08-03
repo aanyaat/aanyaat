@@ -7,8 +7,9 @@ import {
   Download,
   Heart,
   Sparkles,
+  Bot,
 } from 'lucide-react';
-import { coupons, playlist, person } from '@/content';
+import { coupons, playlist, person, memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useConfetti } from '@/lib/useConfetti';
@@ -240,43 +241,6 @@ export function GiftsPage() {
 
       {/* Keyframes for the lucky-number tulip reveal */}
       <style>{`
-        .tulip-particle {
-          position: absolute;
-          left: 50%;
-          top: 58%;
-          width: 8px;
-          height: 8px;
-          border-radius: 9999px;
-          opacity: 0;
-          animation-name: tulip-particle-converge;
-          animation-timing-function: ease-in;
-          animation-fill-mode: both;
-        }
-        .tulip-bloom {
-          transform-origin: 50% 100%;
-          opacity: 0;
-          animation-name: tulip-bloom-grow;
-          animation-duration: 550ms;
-          animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-          animation-fill-mode: both;
-        }
-        @keyframes tulip-particle-converge {
-          0% {
-            opacity: 0;
-            transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(1);
-          }
-          15% { opacity: 1; }
-          75% { opacity: 0.85; }
-          100% {
-            opacity: 0;
-            transform: translate(-50%, -50%) translate(0, 0) scale(0.3);
-          }
-        }
-        @keyframes tulip-bloom-grow {
-          0% { opacity: 0; transform: scale(0.2) translateY(14px); }
-          70% { opacity: 1; transform: scale(1.12) translateY(-4px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
         /* Fades the lucky-number panel in on its own — it can't rely on
            a scroll-triggered reveal observer since it doesn't exist in
            the DOM until after the button click. */
@@ -286,6 +250,56 @@ export function GiftsPage() {
         @keyframes lucky-panel-fade {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* photo-to-tulip morph */
+        .morph-photo {
+          animation: morph-photo 1.9s cubic-bezier(0.45, 0, 0.2, 1) both;
+        }
+        .morph-glow {
+          animation: morph-glow 1.2s ease-out both;
+        }
+        .morph-spark {
+          animation: morph-spark 0.9s ease-out both;
+          box-shadow: 0 0 8px rgba(249, 226, 138, 0.85);
+        }
+        .morph-tulip {
+          transform-origin: 50% 82%;
+          animation: morph-tulip 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        @keyframes morph-photo {
+          0% {
+            opacity: 0;
+            transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) scale(0.5) rotate(var(--rot));
+          }
+          18% { opacity: 1; }
+          55% {
+            opacity: 0.95;
+            transform: translate(-50%, -50%) translate(calc(var(--sx) * 0.22), calc(var(--sy) * 0.22)) scale(0.72) rotate(calc(var(--rot) * 0.25));
+          }
+          80% {
+            opacity: 0.45;
+            transform: translate(-50%, -50%) translate(0, 0) scale(0.3) rotate(0deg);
+          }
+          100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) translate(0, 0) scale(0.08) rotate(0deg);
+          }
+        }
+        @keyframes morph-glow {
+          0%, 45% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+          62% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.35); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); }
+        }
+        @keyframes morph-tulip {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0) translateY(26px); }
+          55% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) translateY(-8px); }
+          100% { opacity: 1; transform: translate(-50%, -50%) scale(1) translateY(0); }
+        }
+        @keyframes morph-spark {
+          0%, 55% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+          72% { opacity: 1; transform: translate(-50%, -50%) translate(var(--ex), var(--ey)) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) translate(calc(var(--ex) * 1.35), calc(var(--ey) * 1.35)) scale(0.3); }
         }
       `}</style>
 
@@ -323,17 +337,15 @@ export function GiftsPage() {
 
             {/* Embedded player — YouTube playlist embed */}
             <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100">
-              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100">
-                <iframe
-                  className="aspect-[16/9] w-full"
-                  src="https://www.youtube.com/embed/xitd9mEZIHk"
-                  title="Mast Magan"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
+              <iframe
+                className="aspect-[16/9] w-full"
+                src="https://www.youtube.com/embed/xitd9mEZIHk"
+                title="Mast Magan"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
             </div>
 
             <a
@@ -490,17 +502,62 @@ export function GiftsPage() {
                     {luckyNumber}
                   </p>
                   <p className="mt-2 font-body text-sm italic text-wine-500/70">
-                    {luckyNumber} tulips, one for every reason I adore you.
+                    Now watch — every little piece of you, blooming into one beautiful flower.
                   </p>
-                  <div className="mt-6 flex flex-wrap items-end justify-center gap-1">
-                    {Array.from({ length: luckyNumber ?? 0 }).map((_, i) => (
-                      <TulipBurst key={`${revealKey}-${i}`} delay={i * 130} />
-                    ))}
-                  </div>
+                  <PhotoTulipMorph key={revealKey} startDelay={0} />
                 </>
               )}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Offline AI companion */}
+      <section className="px-6 pb-16">
+        <div className="reveal mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
+          <div className="grid items-center gap-8 md:grid-cols-5">
+            <div className="md:col-span-3">
+              <span className="chip bg-rose-100 text-rose-600">
+                <Bot className="h-3.5 w-3.5" />
+                Always with you
+              </span>
+              <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
+                A little companion that never needs the internet
+              </h3>
+              <p className="mt-4 font-body text-lg leading-relaxed text-wine-500/90">
+                Remember when we talked about the protests, and the internet just… wasn't there? That can happen anytime. So I made you something for those moments — an offline AI you can talk to. Big important questions, tiny everyday issues, anything on your mind. It lives on your phone, no signal needed, no one watching.
+              </p>
+              <p className="mt-3 font-body text-base leading-relaxed text-wine-500/80">
+                Think of it as a small piece of me that's always in your pocket — staying with you, along with me, always. Even when the world goes quiet, you've still got someone to ask.
+              </p>
+              <p className="mt-3 font-body text-sm italic text-rose-600/90">
+                And before you say it — I know, I know, "you don't have storage" for another app 😂 So I didn't send an app. I built you a whole website instead. For you. Only you. Always yours.
+              </p>
+              <a
+                href="https://aanyaaat.pages.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mt-7"
+              >
+                <Bot className="h-4 w-4" />
+                Meet your companion
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="relative">
+                <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-rose-200 to-gold-200 opacity-70 blur-2xl" />
+                <div className="relative grid place-items-center rounded-[2rem] bg-gradient-to-br from-wine-700 to-rose-600 p-10 text-center text-white shadow-card">
+                  <Bot className="h-16 w-16 animate-heart-beat text-gold-200" />
+                  <p className="mt-4 font-display text-xl text-white">No internet. No problem.</p>
+                  <p className="mt-1 font-body text-sm text-cream-200/80">
+                    Ask it anything, anywhere, anytime.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -530,84 +587,155 @@ export function GiftsPage() {
   );
 }
 
-// --- lucky-number tulip reveal ---
+// --- photo-to-tulip morph reveal ---
 
-const TULIP_PARTICLE_COLORS = ['#f36c96', '#e2497a', '#c78a2e', '#e7c98f', '#b3324a'];
+const MORPH_PHOTO_SRCS = memories.slice(0, 5).map((m) => m.src);
 
-type ParticleStyle = CSSProperties & {
-  '--dx': string;
-  '--dy': string;
+const MORPH_SCATTER = [
+  { x: -128, y: -64 },
+  { x: 124, y: -88 },
+  { x: -104, y: 84 },
+  { x: 112, y: 72 },
+  { x: 0, y: -116 },
+];
+
+const MORPH_SPARK_COUNT = 14;
+
+type MorphStyle = CSSProperties & {
+  '--sx'?: string;
+  '--sy'?: string;
+  '--rot'?: string;
+  '--ex'?: string;
+  '--ey'?: string;
 };
 
-function TulipBurst({ delay = 0 }: { delay?: number }) {
-  // Each burst gets its own random scatter, generated once per mount —
-  // callers force a remount per reveal via the `key` prop so the
-  // particles re-randomize and the animation replays from scratch.
-  const particles = useMemo(
+function PhotoTulipMorph({ startDelay = 0 }: { startDelay?: number }) {
+  const sparks = useMemo(
     () =>
-      Array.from({ length: 10 }, () => ({
-        dx: (Math.random() - 0.5) * 140,
-        dy: (Math.random() - 0.5) * 140 - 20,
-        color:
-          TULIP_PARTICLE_COLORS[
-          Math.floor(Math.random() * TULIP_PARTICLE_COLORS.length)
+      Array.from({ length: MORPH_SPARK_COUNT }, () => {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 70 + Math.random() * 70;
+        return {
+          ex: Math.cos(angle) * dist,
+          ey: Math.sin(angle) * dist,
+          size: 4 + Math.random() * 5,
+          color: ['#f9e28a', '#ffabb9', '#f36c96', '#e8b62a'][
+            Math.floor(Math.random() * 4)
           ],
-        duration: 450 + Math.random() * 250,
-      })),
+          delay: Math.random() * 220,
+        };
+      }),
     []
   );
 
   return (
-    <div className="relative h-28 w-16 shrink-0">
-      {particles.map((p, i) => (
+    <div className="relative mx-auto mt-6 h-72 w-full max-w-sm sm:h-80">
+      {/* glow burst at the merge point */}
+      <span
+        className="morph-glow absolute left-1/2 top-1/2 h-44 w-44 rounded-full"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(249,226,138,0.9) 0%, rgba(255,171,185,0.5) 45%, transparent 70%)',
+          animationDelay: `${startDelay + 1300}ms`,
+        }}
+      />
+
+      {/* her photos, swirling in and converging */}
+      {MORPH_PHOTO_SRCS.map((src, i) => {
+        const s = MORPH_SCATTER[i] ?? { x: 0, y: 0 };
+        return (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            aria-hidden="true"
+            className="morph-photo absolute left-1/2 top-1/2 h-20 w-20 rounded-2xl object-cover shadow-card ring-2 ring-white/80 sm:h-24 sm:w-24"
+            style={
+              {
+                animationDelay: `${startDelay + i * 90}ms`,
+                '--sx': `${s.x}px`,
+                '--sy': `${s.y}px`,
+                '--rot': `${(i - 2) * 14}deg`,
+              } as MorphStyle
+            }
+          />
+        );
+      })}
+
+      {/* magic sparkles bursting outward as the tulip blooms */}
+      {sparks.map((s, i) => (
         <span
           key={i}
-          className="tulip-particle"
+          className="morph-spark absolute left-1/2 top-1/2 rounded-full"
           style={
             {
-              background: p.color,
-              animationDuration: `${p.duration}ms`,
-              animationDelay: `${delay + i * 14}ms`,
-              '--dx': `${p.dx}px`,
-              '--dy': `${p.dy}px`,
-            } as ParticleStyle
+              width: s.size,
+              height: s.size,
+              background: s.color,
+              animationDelay: `${startDelay + 1500 + s.delay}ms`,
+              '--ex': `${s.ex}px`,
+              '--ey': `${s.ey}px`,
+            } as MorphStyle
           }
         />
       ))}
+
+      {/* the single beautiful tulip, blooming from all of her */}
       <svg
-        viewBox="0 0 100 140"
-        className="tulip-bloom absolute inset-0 h-28 w-16"
-        style={{ animationDelay: `${delay + 360}ms` }}
+        viewBox="0 0 120 170"
+        className="morph-tulip absolute left-1/2 top-1/2 h-64 w-48 sm:h-72 sm:w-56"
+        style={{ animationDelay: `${startDelay + 1500}ms` }}
+        aria-label="A tulip blooming from her photos."
       >
-        {/* stem */}
+        <defs>
+          <linearGradient id="morph-petal" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#ff8aa6" />
+            <stop offset="1" stopColor="#d63264" />
+          </linearGradient>
+          <linearGradient id="morph-petal-dark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#e85a82" />
+            <stop offset="1" stopColor="#b3264a" />
+          </linearGradient>
+          <linearGradient id="morph-stem" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#3f7a46" />
+            <stop offset="0.5" stopColor="#5aa25f" />
+            <stop offset="1" stopColor="#3f7a46" />
+          </linearGradient>
+        </defs>
         <path
-          d="M50 62 C 47 90 53 112 50 136"
-          stroke="#4f8f56"
-          strokeWidth="5"
+          d="M60 70 C 56 100 64 132 60 166"
+          stroke="url(#morph-stem)"
+          strokeWidth="6"
           fill="none"
           strokeLinecap="round"
         />
-        {/* leaves */}
         <path
-          d="M50 96 C 28 90 10 100 4 120 C 24 122 44 112 50 98 Z"
-          fill="#4f8f56"
+          d="M60 112 C 34 104 12 116 4 140 C 30 142 54 130 60 114 Z"
+          fill="url(#morph-stem)"
         />
         <path
-          d="M50 108 C 72 102 90 112 96 130 C 76 132 56 124 50 110 Z"
+          d="M60 126 C 86 118 108 130 116 152 C 90 154 66 142 60 128 Z"
           fill="#3f7a46"
         />
-        {/* petals — back-left, back-right, front-center */}
         <path
-          d="M50 22 C 30 24 22 46 30 64 C 36 70 44 70 50 64 C 42 52 40 34 50 22 Z"
-          fill="#c93865"
+          d="M60 24 C 36 26 26 52 36 74 C 44 82 54 82 60 74 C 50 60 48 38 60 24 Z"
+          fill="url(#morph-petal-dark)"
         />
         <path
-          d="M50 22 C 70 24 78 46 70 64 C 64 70 56 70 50 64 C 58 52 60 34 50 22 Z"
-          fill="#c93865"
+          d="M60 24 C 84 26 94 52 84 74 C 76 82 66 82 60 74 C 70 60 72 38 60 24 Z"
+          fill="url(#morph-petal-dark)"
         />
         <path
-          d="M50 16 C 36 16 30 42 40 62 C 44 68 56 68 60 62 C 70 42 64 16 50 16 Z"
-          fill="#f36c96"
+          d="M60 16 C 42 16 34 48 46 72 C 52 80 68 80 74 72 C 86 48 78 16 60 16 Z"
+          fill="url(#morph-petal)"
+        />
+        <path
+          d="M60 22 C 52 26 48 44 52 64"
+          stroke="#ffd0d8"
+          strokeWidth="2"
+          fill="none"
+          opacity="0.6"
+          strokeLinecap="round"
         />
       </svg>
     </div>

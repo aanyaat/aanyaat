@@ -1,127 +1,86 @@
 import { useEffect, useRef, useState } from 'react';
 import { Music2, Volume2, VolumeX } from 'lucide-react';
 
-/**
- * A soft, royalty-free ambient loop is embedded as a short data-less
- * synthetic tone generated via the Web Audio API so the site ships
- * with zero external audio assets and never breaks autoplay policies.
- * The user toggles play/pause; nothing plays until they interact.
- */
+// YouTube video IDs to try in order (Mast Magan → Happy Birthday fallback)
+const VIDEO_IDS = ['xitd9mEZIHk', 'ZbZSe6N_BXs'];
+
 export function MusicToggle() {
   const [playing, setPlaying] = useState(false);
-  const ctxRef = useRef<AudioContext | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
-  const nodesRef = useRef<OscillatorNode[]>([]);
+  const [videoIndex, setVideoIndex] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
-    return () => {
-      stop();
-      ctxRef.current?.close().catch(() => {});
-    };
-  }, []);
-
-  const start = () => {
-    const Ctx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext })
-        .webkitAudioContext;
-    const ctx = new Ctx();
-    ctxRef.current = ctx;
-
-    const master = ctx.createGain();
-    master.gain.value = 0;
-    master.connect(ctx.destination);
-    gainRef.current = master;
-
-    // A gentle, dreamy chord (A major 7-ish) with slow detune drift.
-    const freqs = [220, 277.18, 329.63, 440];
-    const types: OscillatorType[] = ['sine', 'sine', 'triangle', 'sine'];
-    freqs.forEach((f, i) => {
-      const osc = ctx.createOscillator();
-      osc.type = types[i];
-      osc.frequency.value = f;
-      const g = ctx.createGain();
-      g.gain.value = i === 0 ? 0.5 : 0.25;
-      // slow LFO-ish wobble via detune
-      osc.detune.value = (i - 1.5) * 4;
-      osc.connect(g);
-      g.connect(master);
-      osc.start();
-      nodesRef.current.push(osc);
-    });
-
-    // fade in
-    const now = ctx.currentTime;
-    master.gain.cancelScheduledValues(now);
-    master.gain.setValueAtTime(0, now);
-    master.gain.linearRampToValueAtTime(0.06, now + 1.6);
+  // Send a postMessage command to the YouTube iframe player
+  const postCmd = (cmd: 'playVideo' | 'pauseVideo' | 'stopVideo') => {
+    iframeRef.current?.contentWindow?.postMessage(
+      JSON.stringify({ event: 'command', func: cmd, args: [] }),
+      '*'
+    );
   };
 
-  const stop = () => {
-    const ctx = ctxRef.current;
-    const master = gainRef.current;
-    if (ctx && master) {
-      const now = ctx.currentTime;
-      master.gain.cancelScheduledValues(now);
-      master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0, now + 0.4);
-    }
-    window.setTimeout(() => {
-      nodesRef.current.forEach((o) => {
-        try {
-          o.stop();
-        } catch {
-          /* already stopped */
-        }
-      });
-      nodesRef.current = [];
-    }, 500);
-  };
-
-  const toggle = async () => {
+  const toggle = () => {
     if (playing) {
-      stop();
+      postCmd('pauseVideo');
       setPlaying(false);
-      return;
-    }
-    if (!ctxRef.current) {
-      start();
     } else {
-      // resume + fade back in
-      await ctxRef.current.resume();
-      const master = gainRef.current!;
-      const now = ctxRef.current.currentTime;
-      master.gain.cancelScheduledValues(now);
-      master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0.06, now + 1.2);
+      postCmd('playVideo');
+      setPlaying(true);
     }
-    setPlaying(true);
   };
+
+  // Try the next fallback video if the current one fails to load
+  const handleError = () => {
+    if (videoIndex < VIDEO_IDS.length - 1) {
+      setVideoIndex((i) => i + 1);
+    }
+  };
+
+  // When the video index changes while playing, re-issue playVideo after the iframe reloads
+  useEffect(() => {
+    if (playing) {
+      const t = setTimeout(() => postCmd('playVideo'), 1500);
+      return () => clearTimeout(t);
+    }
+  }, [videoIndex]);
+
+  const src = `https://www.youtube.com/embed/${VIDEO_IDS[videoIndex]}?enablejsapi=1&autoplay=0&controls=0&loop=1&playlist=${VIDEO_IDS[videoIndex]}&modestbranding=1&rel=0&playsinline=1`;
 
   return (
-    <button
-      onClick={toggle}
-      aria-label={playing ? 'Mute background music' : 'Play background music'}
-      aria-pressed={playing}
-      className="group fixed bottom-5 right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-wine-700 text-cream-100 shadow-card transition-all duration-300 hover:scale-105 hover:bg-wine-600"
-    >
-      <span
-        className={[
-          'absolute inset-0 rounded-full bg-rose-400/40',
-          playing ? 'animate-pulse-ring' : '',
-        ].join(' ')}
-      />
-      {playing ? (
-        <Volume2 className="relative h-5 w-5" />
-      ) : (
-        <VolumeX className="relative h-5 w-5" />
-      )}
-      <Music2
-        className={[
-          'absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5',
-          playing ? 'animate-spin text-gold-300' : 'text-gold-400/70',
-        ].join(' ')}
-      />
-    </button>
+    <>
+      {/* Hidden YouTube player */}
+      <div className="fixed -left-[9999px] -top-[9999px] h-1 w-1 overflow-hidden" aria-hidden="true">
+        <iframe
+          ref={iframeRef}
+          src={src}
+          title="background music"
+          allow="autoplay"
+          onError={handleError}
+        />
+      </div>
+
+      <button
+        onClick={toggle}
+        aria-label={playing ? 'Mute background music' : 'Play background music'}
+        aria-pressed={playing}
+        className="group fixed bottom-5 right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-wine-700 text-cream-100 shadow-card transition-all duration-300 hover:scale-105 hover:bg-wine-600"
+      >
+        <span
+          className={[
+            'absolute inset-0 rounded-full bg-rose-400/40',
+            playing ? 'animate-pulse-ring' : '',
+          ].join(' ')}
+        />
+        {playing ? (
+          <Volume2 className="relative h-5 w-5" />
+        ) : (
+          <VolumeX className="relative h-5 w-5" />
+        )}
+        <Music2
+          className={[
+            'absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5',
+            playing ? 'animate-spin text-gold-300' : 'text-gold-400/70',
+          ].join(' ')}
+        />
+      </button>
+    </>
   );
 }

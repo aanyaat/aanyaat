@@ -115,7 +115,7 @@ export function HomePage() {
       </section>
 
       {/* PREVIEW CARDS */}
-      <section className="relative bg-cream-100 py-24">
+      <section className="relative bg-cream-100 pt-24 pb-4">
         <div className="mx-auto max-w-6xl px-6">
           <div className="reveal mx-auto max-w-2xl text-center">
             <span className="chip bg-rose-100 text-rose-600">What’s inside</span>
@@ -153,7 +153,7 @@ export function HomePage() {
           </div>
 
           {/* nav strip */}
-          <div className="reveal mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-rose-200/50 pt-10">
+          <div className="reveal mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-rose-200/50 pt-8">
             {nav
               .filter((n) => n.path !== '/')
               .map((n) => (
