@@ -1,7 +1,9 @@
+import { MapPin, Satellite } from 'lucide-react';
 import { timeline, person } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useRouter } from '@/lib/router';
+import { SatelliteZoomMap } from '@/components/SatelliteZoomMap';
 
 export function TimelinePage() {
   const { navigate } = useRouter();
@@ -21,7 +23,7 @@ export function TimelinePage() {
         </div>
       </section>
 
-      <section className="px-6 pb-24">
+      <section className="px-6 pb-12">
         <div className="mx-auto max-w-3xl">
           <ol className="relative">
             {/* center line */}
@@ -64,21 +66,43 @@ export function TimelinePage() {
               );
             })}
           </ol>
+        </div>
+      </section>
 
-          <div className="reveal mt-6 rounded-3xl bg-wine-700 p-8 text-center text-cream-100 shadow-card">
-            <p className="font-display text-2xl text-white">
-              And the best part? The timeline isn't finished.
+      {/* Satellite zoom — where it all began */}
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-4xl">
+          <div className="reveal mx-auto mb-10 max-w-2xl text-center">
+            <span className="chip bg-rose-100 text-rose-600">
+              <Satellite className="h-3.5 w-3.5" />
+              Where it all began
+            </span>
+            <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
+              Fly down to where we <span className="text-gradient-gold">met</span>
+            </h3>
+            <p className="mt-3 font-body text-wine-500/80">
+              Press "Fly from space" and watch the satellite zoom all the way down from Earth to the exact spot — Godrej Royale Woods, Devanahalli. Real satellite imagery, just like in the movies.
             </p>
-            <p className="mt-3 font-body text-cream-200/90">
-              The next entry is whatever we do tomorrow.
-            </p>
-            <button
-              onClick={() => navigate('/quiz')}
-              className="btn-primary mt-6 bg-rose-400 hover:bg-rose-300"
-            >
-              Take the quiz about us
-            </button>
           </div>
+          <SatelliteZoomMap />
+        </div>
+      </section>
+
+      <section className="px-6 pb-24">
+        <div className="reveal mx-auto max-w-3xl rounded-3xl bg-wine-700 p-8 text-center text-cream-100 shadow-card">
+          <MapPin className="mx-auto h-8 w-8 animate-heart-beat text-rose-300" />
+          <p className="mt-4 font-display text-2xl text-white">
+            And the best part? The timeline isn't finished.
+          </p>
+          <p className="mt-3 font-body text-cream-200/90">
+            The next entry is whatever we do tomorrow.
+          </p>
+          <button
+            onClick={() => navigate('/quiz')}
+            className="btn-primary mt-6 bg-rose-400 hover:bg-rose-300"
+          >
+            Take the quiz about us
+          </button>
         </div>
       </section>
     </PageShell>

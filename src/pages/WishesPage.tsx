@@ -3,6 +3,7 @@ import { person, wishes } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useRouter } from '@/lib/router';
+import { CakeRitual, CakeSectionHeader } from '@/components/CakeRitual';
 
 export function WishesPage() {
   const { navigate } = useRouter();
@@ -17,7 +18,7 @@ export function WishesPage() {
                 Six things, off the top of my heart
               </>
             }
-            subtitle={`Not a complete list — that would take a whole other website. But here’s a start, ${person.nickname}.`}
+            subtitle={`Not a complete list — that would take a whole other website. But here's a start, ${person.nickname}.`}
           />
         </div>
       </section>
@@ -50,15 +51,23 @@ export function WishesPage() {
         </div>
       </section>
 
+      {/* Cake ritual — make a wish */}
+      <section className="px-6 pb-16">
+        <div className="mx-auto max-w-4xl">
+          <CakeSectionHeader />
+          <CakeRitual />
+        </div>
+      </section>
+
       {/* closing letter */}
       <section className="px-6 pb-24">
         <div className="reveal mx-auto max-w-2xl rounded-3xl bg-wine-700 p-9 text-center text-cream-100 shadow-card sm:p-12">
           <Heart className="mx-auto h-8 w-8 animate-heart-beat text-rose-300" fill="currentColor" />
           <p className="mt-5 font-display text-2xl italic leading-relaxed text-white sm:text-3xl">
-            “The more I know you, the more I want to know you.”
+            "The more I know you, the more I want to know you."
           </p>
           <p className="mt-6 font-body text-cream-200/90">
-            Happy birthday, {person.name}. Here’s to more reels shared at midnight,
+            Happy birthday, {person.name}. Here's to more reels shared at midnight,
             more "kya kha rhe ho?" evenings, and every good night text still to come.
             You are special — more than this website can hold, but I tried.
           </p>

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ArrowRight, Cake, Gift, Sparkles } from 'lucide-react';
+import { ArrowRight, Cake, Gift, HelpCircle, MapPin, Sparkles } from 'lucide-react';
 import { heroImage, nav, person, wishes } from '@/content';
 import { useCountdown } from '@/lib/useCountdown';
 import { useConfetti } from '@/lib/useConfetti';
@@ -26,9 +26,10 @@ export function HomePage() {
   }, [cd.isToday, fire]);
 
   const previews = [
-    { icon: Sparkles, label: 'Reasons I Adore you', path: '/wishes', hint: wishes.length + ' little letters' },
+    { icon: Sparkles, label: 'Reasons I Adore you', path: '/wishes', hint: wishes.length + ' letters + a cake' },
     { icon: Gift, label: 'Our memories', path: '/memories', hint: memories.length + ' moments' },
-    { icon: Cake, label: 'A quiz about us', path: '/quiz', hint: 'how well do you know us?' },
+    { icon: MapPin, label: 'Our timeline', path: '/timeline', hint: 'our story + satellite zoom' },
+    { icon: HelpCircle, label: 'A quiz about us', path: '/quiz', hint: 'how well do you know us?' },
   ];
 
   return (
