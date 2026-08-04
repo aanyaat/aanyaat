@@ -116,7 +116,7 @@ export function HomePage() {
       </section>
 
       {/* PREVIEW CARDS */}
-      <section className="relative bg-cream-100 pt-24 pb-4">
+      <section className="relative bg-cream-100 pb-4">
         <div className="mx-auto max-w-6xl px-6">
           <div className="reveal mx-auto max-w-2xl text-center">
             <span className="chip bg-rose-100 text-rose-600">What’s inside</span>

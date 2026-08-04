@@ -150,6 +150,12 @@ export const timeline: {
       icon: Coffee,
     },
     {
+      date: 'Now',
+      title: 'Bengaluru to Delhi — long distance',
+      body: 'You moved to Delhi. Palam. And just like that, our map grew a whole new pin. Long distance is hard — the late calls, the missing, the not-knowing-when. But here\'s what I know: every flight booked, every "call you when I land" text, every night spent on video instead of next to you is worth it. The distance is temporary. Us is not. And one day, the map is going to have just one pin again.',
+      icon: MapPin,
+    },
+    {
       date: 'Today',
       title: 'This little corner of the internet',
       body: 'Because a simple birthday message wasn\'t enough. Because you deserve more than a forwarded wish. So I built this — every word, every page, for you. Happy birthday, Aanyaaa.',

@@ -1,9 +1,9 @@
-import { MapPin, Satellite } from 'lucide-react';
+import { Satellite, Plane } from 'lucide-react';
 import { timeline, person } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useRouter } from '@/lib/router';
-import { SatelliteZoomMap } from '@/components/SatelliteZoomMap';
+import { InteractiveMap } from '@/components/InteractiveMap';
 
 export function TimelinePage() {
   const { navigate } = useRouter();
@@ -69,33 +69,33 @@ export function TimelinePage() {
         </div>
       </section>
 
-      {/* Satellite zoom — where it all began */}
+      {/* Interactive satellite map — where we met + where you are now */}
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-4xl">
           <div className="reveal mx-auto mb-10 max-w-2xl text-center">
             <span className="chip bg-rose-100 text-rose-600">
               <Satellite className="h-3.5 w-3.5" />
-              Where it all began
+              Our two worlds
             </span>
             <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
-              Fly down to where we <span className="text-gradient-gold">met</span>
+              From where we met, to where you <span className="text-gradient-gold">are now</span>
             </h3>
             <p className="mt-3 font-body text-wine-500/80">
-              Press "Fly from space" and watch the satellite zoom all the way down from Earth to the exact spot — Godrej Royale Woods, Devanahalli. Real satellite imagery, just like in the movies.
+              This is a real satellite map. Drag it, pinch to zoom, explore it like you would any map. Press "Fly from space" to zoom from orbit down to where we met in Bengaluru — then press "Fly to you in Delhi" to watch a plane travel the whole distance to where you are now.
             </p>
           </div>
-          <SatelliteZoomMap />
+          <InteractiveMap />
         </div>
       </section>
 
       <section className="px-6 pb-24">
         <div className="reveal mx-auto max-w-3xl rounded-3xl bg-wine-700 p-8 text-center text-cream-100 shadow-card">
-          <MapPin className="mx-auto h-8 w-8 animate-heart-beat text-rose-300" />
+          <Plane className="mx-auto h-8 w-8 animate-heart-beat text-gold-300" />
           <p className="mt-4 font-display text-2xl text-white">
-            And the best part? The timeline isn't finished.
+            Bengaluru to Delhi. Long distance, but never long enough to lose us.
           </p>
           <p className="mt-3 font-body text-cream-200/90">
-            The next entry is whatever we do tomorrow.
+            The next timeline entry is the day this distance closes. Until then, every call, every text, every visit is another line on this map.
           </p>
           <button
             onClick={() => navigate('/quiz')}
