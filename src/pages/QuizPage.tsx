@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'; import { Check, X, PartyPopper, RotateCcw, ArrowRight } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Check, X, PartyPopper, RotateCcw, ArrowRight, MailCheck } from 'lucide-react';
 import { quiz, person } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useConfetti } from '@/lib/useConfetti';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { useRouter } from '@/lib/router';
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 type Phase = 'idle' | 'answered';
 
@@ -17,53 +21,56 @@ export function QuizPage() {
   const [score, setScore] = useState(0);
   const [finalScore, setFinalScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [notifyState, setNotifyState] = useState<'idle' | 'sending' | 'sent' | 'failed'>('idle');
+  const answersRef = useRef<number[]>([]);
 
-  // 👇 ADD THESE HERE
-  useEffect(() => {
-    console.log("Quiz mounted");
-
-    return () => {
-      console.log("Quiz unmounted");
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log("STATE", {
-      score,
-      finalScore,
-      done,
-      idx,
-      picked,
-      phase,
-    });
-  }, [score, finalScore, done, idx, picked, phase]);
-
-  // Existing code
   const q = quiz[idx];
 
   const pick = (i: number) => {
     if (phase === 'answered') return;
     setPicked(i);
     setPhase('answered');
-    console.log({
-      clicked: i,
-      answer: q.answer,
-      correct: i === q.answer,
-    });
+    answersRef.current[idx] = i;
 
     if (i === q.answer) {
-      const newScore = score + 1;
-      console.log("Updating score to", newScore);
-      setScore(newScore);
+      setScore((s) => s + 1);
       fire(30);
+    }
+  };
+
+  const submitScore = async (finalScoreValue: number) => {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+    setNotifyState('sending');
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/quiz-score-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          score: finalScoreValue,
+          total: quiz.length,
+          answers: answersRef.current,
+        }),
+      });
+      if (res.ok) {
+        setNotifyState('sent');
+      } else {
+        setNotifyState('failed');
+      }
+    } catch {
+      setNotifyState('failed');
     }
   };
 
   const next = () => {
     if (idx + 1 >= quiz.length) {
-      setFinalScore(score);
+      const finalScoreValue = score;
+      setFinalScore(finalScoreValue);
       setDone(true);
       fire(200);
+      void submitScore(finalScoreValue);
       return;
     }
 
@@ -78,6 +85,8 @@ export function QuizPage() {
     setPhase('idle');
     setScore(0);
     setDone(false);
+    setNotifyState('idle');
+    answersRef.current = [];
   };
 
   const displayScore = done ? finalScore : score;
@@ -185,6 +194,29 @@ export function QuizPage() {
                     ? 'Almost perfect — you clearly know us better than almost anyone.'
                     : 'Hey, that’s still more than anyone else on earth would get. It’s us.'}
               </p>
+
+              {notifyState !== 'idle' && (
+                <div
+                  className={[
+                    'mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium',
+                    notifyState === 'sending'
+                      ? 'bg-cream-100 text-wine-500'
+                      : notifyState === 'sent'
+                        ? 'bg-emerald-50 text-emerald-600'
+                        : 'bg-rose-50 text-rose-600',
+                  ].join(' ')}
+                >
+                  {notifyState === 'sending' && 'Sending your score to Akhil…'}
+                  {notifyState === 'sent' && (
+                    <>
+                      <MailCheck className="h-4 w-4" />
+                      Score sent! He'll know how you did.
+                    </>
+                  )}
+                  {notifyState === 'failed' && 'Could not send the score — but the quiz still counts!'}
+                </div>
+              )}
+
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <button onClick={restart} className="btn-ghost">
                   <RotateCcw className="h-4 w-4" />
