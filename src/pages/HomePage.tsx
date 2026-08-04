@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
-import { ArrowRight, Cake, Gift, HelpCircle, MapPin, Sparkles } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { ArrowRight, Gift, HelpCircle, MapPin, Sparkles, Music2, Heart } from 'lucide-react';
 import { heroImage, nav, person, wishes } from '@/content';
 import { useCountdown } from '@/lib/useCountdown';
 import { useConfetti } from '@/lib/useConfetti';
 import { useRouter } from '@/lib/router';
+import { useReveal } from '@/lib/useReveal';
 import { CountdownDisplay } from '@/components/CountdownDisplay';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { memories } from '@/content';
@@ -12,6 +13,7 @@ export function HomePage() {
   const cd = useCountdown(person.birthday);
   const { canvasRef, fire } = useConfetti(false);
   const { navigate } = useRouter();
+  const previewRef = useReveal<HTMLElement>();
 
   // When the birthday arrives, celebrate automatically.
   useEffect(() => {
@@ -26,10 +28,12 @@ export function HomePage() {
   }, [cd.isToday, fire]);
 
   const previews = [
-    { icon: Sparkles, label: 'Reasons I Adore you', path: '/wishes', hint: wishes.length + ' letters + a cake' },
+    { icon: Sparkles, label: 'About this site', path: '/about', hint: 'Why I made this for you' },
+    { icon: Heart, label: 'Reasons I Adore you', path: '/wishes', hint: wishes.length + ' letters + a cake' },
     { icon: Gift, label: 'Our memories', path: '/memories', hint: memories.length + ' moments' },
     { icon: MapPin, label: 'Our timeline', path: '/timeline', hint: 'our story + satellite zoom' },
     { icon: HelpCircle, label: 'A quiz about us', path: '/quiz', hint: 'how well do you know us?' },
+    { icon: Music2, label: 'Music & Gifts', path: '/gifts', hint: 'Playlist, coupons & keepsake' },
   ];
 
   return (
@@ -65,9 +69,9 @@ export function HomePage() {
             className="mx-auto mt-6 max-w-xl animate-fade-up font-body text-lg leading-relaxed text-cream-100/90 sm:text-xl"
             style={{ animationDelay: '0.15s' }}
           >
-            {person.nickname}, a simple birthday message wasn’t enough. So I built
+            {person.nickname}, a simple birthday message wasn't enough. So I built
             this — every page, every word, for you. Wander around, take your time, and
-            let me tell you all the things I don’t always say out loud.
+            let me tell you all the things I don't always say out loud.
           </p>
 
           <div
@@ -116,10 +120,10 @@ export function HomePage() {
       </section>
 
       {/* PREVIEW CARDS */}
-      <section className="relative bg-cream-100 pb-4">
+      <section ref={previewRef} className="relative bg-cream-100 pb-4">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="reveal mx-auto max-w-2xl text-center">
-            <span className="chip bg-rose-100 text-rose-600">What’s inside</span>
+          <div className="reveal mx-auto max-w-2xl pt-16 text-center">
+            <span className="chip bg-rose-100 text-rose-600">What's inside</span>
             <h2 className="mt-4 font-display text-4xl font-semibold text-wine-700 sm:text-5xl">
               A few rooms, made just for you
             </h2>
@@ -128,7 +132,7 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             {previews.map((p) => (
               <button
                 key={p.path}
@@ -154,7 +158,7 @@ export function HomePage() {
           </div>
 
           {/* nav strip */}
-          <div className="reveal mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-rose-200/50 pt-8">
+          <div className="reveal mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-rose-200/50 pt-8 pb-8">
             {nav
               .filter((n) => n.path !== '/')
               .map((n) => (
