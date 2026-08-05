@@ -272,7 +272,7 @@ export const coupons: { icon: ComponentType<{ className?: string }>; title: stri
     icon: Navigation,
     title: 'Get Me Home — Always',
     body: 'I don\'t want you to ever be lost. Remember when I told you to download offline maps and you complained about the memory? So I built this — it gives you an idea of how to always get home and to your family, even with no signal. Hoping you never have to use it, but making it just in case you do. Tap to open it.',
-    url: 'https://aanyaaat.pages.dev/#get-me-home',
+    url: 'https://aanya-ai.pages.dev/#get-me-home',
   },
 ];
 
