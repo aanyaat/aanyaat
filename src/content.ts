@@ -12,6 +12,7 @@ import {
   Gift,
   Camera,
   Moon,
+  Navigation,
 } from 'lucide-react';
 
 export const person = {
@@ -246,7 +247,7 @@ export const playlist: { title: string; artist: string; note: string }[] = [
   { title: 'Big Bang Theory', artist: 'Barenaked Ladies', note: 'You sent me this reel too. "Bazinga." You called me a nerd and I said "sure if I\'m a nerd. Nerd X Baddie you said Huh."' },
 ];
 
-export const coupons: { icon: ComponentType<{ className?: string }>; title: string; body: string }[] = [
+export const coupons: { icon: ComponentType<{ className?: string }>; title: string; body: string; url?: string }[] = [
   {
     icon: Coffee,
     title: 'Tea in Bed, Direct',
@@ -266,6 +267,12 @@ export const coupons: { icon: ComponentType<{ className?: string }>; title: stri
     icon: Music2,
     title: 'Eat Off My Plate',
     body: 'You always want what I\'m eating. I said I\'d let you eat off my plate, and if you want more, we\'ll order one more. This coupon makes that official policy for life.',
+  },
+  {
+    icon: Navigation,
+    title: 'Get Me Home — Always',
+    body: 'I don\'t want you to ever be lost. Remember when I told you to download offline maps and you complained about the memory? So I built this — it gives you an idea of how to always get home and to your family, even with no signal. Hoping you never have to use it, but making it just in case you do. Tap to open it.',
+    url: 'https://aanyaaat.pages.dev/#get-me-home',
   },
 ];
 

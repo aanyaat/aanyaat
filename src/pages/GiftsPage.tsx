@@ -406,9 +406,14 @@ export function GiftsPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {coupons.map((c, i) => {
               const isClaimed = claimed.includes(i);
+              const hasUrl = Boolean(c.url);
+              const CouponTag = hasUrl ? 'a' : 'button';
               return (
-                <button
+                <CouponTag
                   key={c.title}
+                  {...(hasUrl
+                    ? { href: c.url, target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
                   onClick={() => claim(i)}
                   className={[
                     'reveal group relative flex items-start gap-4 overflow-hidden rounded-3xl p-6 text-left transition-all duration-500',
@@ -442,6 +447,11 @@ export function GiftsPage() {
                           <Heart className="h-3 w-3" fill="currentColor" />
                           Claimed — see you soon
                         </>
+                      ) : hasUrl ? (
+                        <>
+                          <ExternalLink className="h-3 w-3" />
+                          Tap to open
+                        </>
                       ) : (
                         <>
                           <Sparkles className="h-3 w-3" />
@@ -450,7 +460,7 @@ export function GiftsPage() {
                       )}
                     </span>
                   </div>
-                </button>
+                </CouponTag>
               );
             })}
           </div>
@@ -574,6 +584,15 @@ export function GiftsPage() {
           <p className="mx-auto mt-5 max-w-xl rounded-2xl bg-white/10 px-6 py-4 font-body text-base italic text-cream-100/90 ring-1 ring-white/20">
             "Aree Baba ye toh bas first step hai Next toh aapke liye Dress Select Karna hai, Jo bhi pasand hai yaad se bhej dena — I want to see you in it, something which i bought for my ladyy"
           </p>
+          <a
+            href="https://www.amazon.in/s?k=clothes+for+girlfriend+birthday+gift"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-7 py-3 font-body font-medium text-white ring-1 ring-white/30 transition-all duration-300 hover:bg-white/25 hover:ring-white/50"
+          >
+            <ExternalLink className="h-4 w-4" />
+            Browse dress ideas on Amazon
+          </a>
           <button
             onClick={() => fire(260)}
             className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-body font-medium text-rose-600 shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-glow"
