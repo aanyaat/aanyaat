@@ -8,12 +8,15 @@ import {
   Heart,
   Sparkles,
   Bot,
+  CheckCircle2,
+  Sparkle,
 } from 'lucide-react';
 import { coupons, playlist, person, memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
 import { useConfetti } from '@/lib/useConfetti';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
+import { ScratchOverlay } from '@/components/ScratchCard';
 
 type LuckyStage = 'idle' | 'rolling' | 'revealed';
 
@@ -403,64 +406,104 @@ export function GiftsPage() {
             </p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            {coupons.map((c, i) => {
-              const isClaimed = claimed.includes(i);
-              const hasUrl = Boolean(c.url);
-              const CouponTag = hasUrl ? 'a' : 'button';
-              return (
-                <CouponTag
-                  key={c.title}
-                  {...(hasUrl
-                    ? { href: c.url, target: '_blank', rel: 'noopener noreferrer' }
-                    : {})}
-                  onClick={() => claim(i)}
-                  className={[
-                    'reveal group relative flex items-start gap-4 overflow-hidden rounded-3xl p-6 text-left transition-all duration-500',
-                    isClaimed
-                      ? 'bg-emerald-50 ring-2 ring-emerald-300'
-                      : 'bg-white shadow-soft hover:-translate-y-1 hover:shadow-card',
-                  ].join(' ')}
+          {/* Featured link coupon — full width, always visible */}
+          {coupons.map((c, i) => {
+            if (!c.url) return null;
+            return (
+              <div key={c.title} className="reveal mb-5">
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex items-start gap-4 overflow-hidden rounded-3xl bg-gradient-to-br from-wine-700 to-rose-600 p-6 text-left text-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-glow sm:p-7"
                 >
-                  {/* perforated edge */}
-                  <span className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-rose-400 to-gold-400" />
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
+                  <span className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-gold-300 to-rose-300" />
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 text-gold-200 shadow-soft ring-1 ring-white/20">
                     <c.icon className="h-6 w-6" />
                   </span>
                   <div className="flex-1">
-                    <h4 className="font-display text-lg font-semibold text-wine-700">
+                    <h4 className="font-display text-lg font-semibold text-white sm:text-xl">
                       {c.title}
                     </h4>
-                    <p className="mt-1.5 font-body text-sm leading-relaxed text-wine-500/90">
+                    <p className="mt-1.5 font-body text-sm leading-relaxed text-cream-100/85">
                       {c.body}
                     </p>
-                    <span
-                      className={[
-                        'mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
-                        isClaimed
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : 'bg-rose-100 text-rose-600 group-hover:bg-rose-200',
-                      ].join(' ')}
-                    >
-                      {isClaimed ? (
-                        <>
-                          <Heart className="h-3 w-3" fill="currentColor" />
-                          Claimed — see you soon
-                        </>
-                      ) : hasUrl ? (
-                        <>
-                          <ExternalLink className="h-3 w-3" />
-                          Tap to open
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-3 w-3" />
-                          Tap to claim
-                        </>
-                      )}
+                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-gold-200 ring-1 ring-white/20 transition-all group-hover:bg-white/25">
+                      <ExternalLink className="h-3 w-3" />
+                      Tap to open
                     </span>
                   </div>
-                </CouponTag>
+                </a>
+              </div>
+            );
+          })}
+
+          {/* Scratch coupons — clean 2×2 grid */}
+          <div className="grid gap-5 sm:grid-cols-2">
+            {coupons.map((c, i) => {
+              if (c.url) return null;
+              const isClaimed = claimed.includes(i);
+              return (
+                <div key={c.title} className="reveal">
+                  <button
+                    onClick={() => isClaimed && fire(10)}
+                    className={[
+                      'group relative flex h-full w-full items-start gap-4 overflow-hidden rounded-3xl p-6 text-left transition-all duration-500',
+                      isClaimed
+                        ? 'bg-white ring-2 ring-emerald-300'
+                        : 'bg-white shadow-soft hover:-translate-y-1 hover:shadow-card',
+                    ].join(' ')}
+                  >
+                    {/* perforated edge */}
+                    <span className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-rose-400 to-gold-400" />
+                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
+                      <c.icon className="h-6 w-6" />
+                    </span>
+                    <div className="flex-1">
+                      <h4 className="font-display text-lg font-semibold text-wine-700">
+                        {c.title}
+                      </h4>
+                      <p className="mt-1.5 font-body text-sm leading-relaxed text-wine-500/90">
+                        {c.body}
+                      </p>
+                      <span
+                        className={[
+                          'mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
+                          isClaimed
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : 'bg-rose-100 text-rose-600 group-hover:bg-rose-200',
+                        ].join(' ')}
+                      >
+                        {isClaimed ? (
+                          <>
+                            <CheckCircle2 className="h-3 w-3" />
+                            Claimed — redeem anytime
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="h-3 w-3" />
+                            Scratch to claim
+                          </>
+                        )}
+                      </span>
+                    </div>
+
+                    {/* Claimed ribbon + shimmer — stays visible */}
+                    {isClaimed && (
+                      <>
+                        <div className="pointer-events-none absolute -right-12 top-4 rotate-45 ribbon-pop bg-emerald-500 px-10 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-soft">
+                          Claimed
+                        </div>
+                        <div className="claimed-shimmer pointer-events-none absolute inset-0 rounded-3xl" />
+                      </>
+                    )}
+
+                    {/* Scratch foil — only while unclaimed */}
+                    {!isClaimed && (
+                      <ScratchOverlay onReveal={() => claim(i)} />
+                    )}
+                  </button>
+                </div>
               );
             })}
           </div>
