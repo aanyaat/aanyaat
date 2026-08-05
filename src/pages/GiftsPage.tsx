@@ -587,7 +587,7 @@ export function GiftsPage() {
                 And before you say it — I know, I know, "you don't have storage" for another app 😂 So I didn't send an app. I built you a whole website instead. For you. Only you. Always yours.
               </p>
               <a
-                href="https://aanyaaat.pages.dev/"
+                href="https://aanya-ai.pages.dev/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary mt-7"
