@@ -13,6 +13,7 @@ import {
   Gift,
   Infinity,
   SmilePlus,
+  Compass,
 } from 'lucide-react';
 import { coupons, playlist, person, memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
@@ -558,49 +559,80 @@ export function GiftsPage() {
         </div>
       </section>
 
-      {/* ─── GIFT B: A meaningful experience — Offline AI Companion ─── */}
+      {/* ─── GIFT B: A meaningful experience — Two Offline Tools ─── */}
       <section className="px-6 pb-16">
-        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
-          <div className="grid items-center gap-8 md:grid-cols-5">
-            <div className="md:col-span-3">
-              <span className="chip bg-rose-100 text-rose-600">
-                <Bot className="h-3.5 w-3.5" />
-                Gift B
-              </span>
-              <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
-                A meaningful experience — Offline AI Companion
-              </h3>
-              <p className="mt-4 font-body text-base leading-relaxed text-wine-500/90">
-                I made you an AI companion that works even without the internet. Remember when we talked about the protests, and the internet just… wasn't there? That can happen anytime. So I made you something for those moments — an offline AI you can talk to. Big important questions, tiny everyday issues, anything on your mind. It lives on your phone, no signal needed, no one watching.
-              </p>
-              <p className="mt-3 font-body text-sm leading-relaxed text-wine-500/80">
-                Think of it as a small piece of me that's always in your pocket — staying with you, along with me, always. Even when the world goes quiet, you've still got someone to ask.
-              </p>
-              <p className="mt-3 font-body text-xs italic text-rose-600/90">
-                And before you say it — I know, I know, "you don't have storage" for another app 😂 So I didn't send an app. I built you a whole website instead. For you. Only you. Always yours.
-              </p>
-              <a
-                href="https://aanya-ai.pages.dev/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary mt-7"
-              >
-                <Bot className="h-4 w-4" />
-                Meet your companion
-                <ExternalLink className="h-4 w-4" />
-              </a>
+        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-soft sm:p-10">
+          <div className="max-w-3xl">
+            <span className="chip bg-rose-100 text-rose-600">
+              <Bot className="h-3.5 w-3.5" />
+              Gift B
+            </span>
+            <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
+              A meaningful experience — Two Offline Tools
+            </h3>
+            <p className="mt-4 font-body text-base leading-relaxed text-wine-500/90">
+              I know how much you care about staying connected and safe, especially when the signal drops. So I built you two tools that work completely offline on your phone — a companion to talk to, and a way to always find your way back home.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {/* Tool 1: AI Companion */}
+            <div className="relative flex flex-col justify-between rounded-3xl bg-cream-50/50 p-6 shadow-soft ring-1 ring-rose-100 transition-all duration-300 hover:shadow-card hover:bg-cream-50">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500 text-white shadow-soft">
+                    <Bot className="h-5 w-5 animate-heart-beat" />
+                  </span>
+                  <h4 className="font-display text-lg font-semibold text-wine-700">Offline AI Companion</h4>
+                </div>
+                <p className="mt-4 font-body text-sm leading-relaxed text-wine-500/90">
+                  An offline AI you can talk to. Big important questions, tiny everyday issues, anything on your mind. It lives on your phone, no signal needed, no one watching.
+                </p>
+                <p className="mt-3 font-body text-xs italic text-rose-600/90">
+                  And before you say it — I know, I know, "you don't have storage" for another app 😂 So I built you a website instead.
+                </p>
+              </div>
+              <div className="mt-6 border-t border-rose-100/50 pt-4">
+                <a
+                  href="https://aanya-ai.pages.dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary w-full text-center text-xs justify-center"
+                >
+                  <Bot className="h-3.5 w-3.5" />
+                  Meet your companion
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </div>
             </div>
 
-            <div className="md:col-span-2">
-              <div className="relative">
-                <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-rose-200 to-gold-200 opacity-70 blur-2xl" />
-                <div className="relative grid place-items-center rounded-[2rem] bg-gradient-to-br from-wine-700 to-rose-600 p-10 text-center text-white shadow-card">
-                  <Bot className="h-16 w-16 animate-heart-beat text-gold-200" />
-                  <p className="mt-4 font-display text-xl text-white">No internet. No problem.</p>
-                  <p className="mt-1 font-body text-sm text-cream-200/80">
-                    Ask it anything, anywhere, anytime.
-                  </p>
+            {/* Tool 2: Get Me Home — Always */}
+            <div className="relative flex flex-col justify-between rounded-3xl bg-cream-50/50 p-6 shadow-soft ring-1 ring-rose-100 transition-all duration-300 hover:shadow-card hover:bg-cream-50">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500 text-white shadow-soft">
+                    <Compass className="h-5 w-5 animate-heart-beat" />
+                  </span>
+                  <h4 className="font-display text-lg font-semibold text-wine-700">Get Me Home — Always</h4>
                 </div>
+                <p className="mt-4 font-body text-sm leading-relaxed text-wine-500/90">
+                  I don't want you to ever be lost. Remember when I told you to download offline maps and you complained about the memory? So I built this — it gives you an idea of how to always get home and to your family, even with no signal.
+                </p>
+                <p className="mt-3 font-body text-xs italic text-rose-600/90">
+                  Hoping you never have to use it, but making it just in case you do.
+                </p>
+              </div>
+              <div className="mt-6 border-t border-rose-100/50 pt-4">
+                <a
+                  href="https://aanya-ai.pages.dev/#get-me-home"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-ghost w-full text-center text-xs justify-center border-rose-200 text-rose-600 hover:bg-rose-50"
+                >
+                  <Compass className="h-3.5 w-3.5" />
+                  Open navigation tool
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               </div>
             </div>
           </div>
