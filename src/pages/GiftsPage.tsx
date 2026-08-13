@@ -10,6 +10,9 @@ import {
   Bot,
   CheckCircle2,
   Sparkle,
+  Gift,
+  Infinity,
+  SmilePlus,
 } from 'lucide-react';
 import { coupons, playlist, person, memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
@@ -24,6 +27,15 @@ const LUCKY_MIN = 1;
 const LUCKY_MAX = 9;
 const randomLucky = () =>
   LUCKY_MIN + Math.floor(Math.random() * (LUCKY_MAX - LUCKY_MIN + 1));
+
+
+
+const fourGifts = [
+  { letter: 'A', label: 'Something handmade', icon: Gift, body: `This website. I created this for you by my own hands, my time, and my thoughts — because I wanted to make something that exists only for you. Not a forwarded wish, not a bought gift. Something I built from scratch, just for you.` },
+  { letter: 'B', label: 'A meaningful experience', icon: Bot, body: `I made you an AI companion that works even without the internet. Remember when we talked about the protests and the internet just wasn't there? I didn't want you to ever feel stuck. Even when the internet can't help you, I wanted to make sure you could always find your way back home — back to me.`, link: { href: 'https://aanya-ai.pages.dev/', text: 'Meet your companion' } },
+  { letter: 'C', label: "Something you've wanted forever", icon: Infinity, body: `This website isn't a one-day birthday website. It will keep growing. New photos, new memories, new notes — I'll keep adding to it. I hope this is something you've wanted forever — a gift specially made for you that stays with you forever.` },
+  { letter: 'D', label: 'Kiss', icon: SmilePlus, body: `The kiss gift will soon come to you. 😘` },
+] as const;
 
 export function GiftsPage() {
   const { canvasRef, fire } = useConfetti(true);
@@ -306,284 +318,265 @@ export function GiftsPage() {
         }
       `}</style>
 
+      {/* ─── THE 4 GIFTS EXPERIENCE ─── */}
       <section className="px-6 pt-32 pb-10 sm:pt-40">
         <div className="mx-auto max-w-3xl">
-          <SectionTitle
-            eyebrow="Music & gifts"
-            title={
-              <>
-                A soundtrack, and a few <span className="text-gradient-gold">gifts</span>
-              </>
-            }
-            subtitle={`Everything good deserves a playlist. And because I couldn't wrap the real presents, here are some you can keep in your pocket, ${person.nickname}.`}
-          />
-        </div>
-      </section>
-
-      {/* Playlist */}
-      <section className="px-6 pb-16">
-        <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
-          <div className="reveal rounded-3xl bg-white p-7 shadow-soft sm:p-8">
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rose-500 text-white shadow-soft">
-                <Music2 className="h-5 w-5" />
-              </span>
-              <div>
-                <h3 className="font-display text-xl font-semibold text-wine-700">
-                  Songs and shows that remind me of you
-                </h3>
-                <p className="font-body text-sm text-wine-500/70">
-                  Press play — these are from our conversations.
-                </p>
-              </div>
-            </div>
-
-            {/* Embedded player — YouTube playlist embed */}
-            <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100">
-              <iframe
-                className="aspect-[16/9] w-full"
-                src="https://www.youtube.com/embed/xitd9mEZIHk"
-                title="Mast Magan"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            </div>
-
-            <a
-              href="https://www.youtube.com/results?search_query=love+songs+playlist"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-1.5 font-body text-sm font-medium text-rose-600 transition-all hover:gap-2.5"
-            >
-              Open more songs
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          </div>
-
-          {/* Track list */}
-          <div className="reveal rounded-3xl bg-wine-700 p-7 text-cream-100 shadow-card sm:p-8">
-            <h3 className="font-display text-xl font-semibold text-white">
-              The track list
-            </h3>
-            <p className="mt-1 font-body text-sm text-cream-200/70">
-              Each one comes with a reason.
-            </p>
-            <ul className="mt-6 divide-y divide-white/10">
-              {playlist.map((t, i) => (
-                <li key={t.title} className="flex items-start gap-4 py-3.5">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/10 font-display text-sm text-gold-300">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <p className="font-body font-medium text-white">{t.title}</p>
-                    <p className="font-body text-xs text-cream-200/60">{t.artist}</p>
-                    <p className="mt-1 font-body text-sm italic text-cream-200/80">
-                      {t.note}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Coupons */}
-      <section className="px-6 pb-16">
-        <div className="mx-auto max-w-5xl">
-          <div className="reveal mx-auto mb-10 max-w-2xl text-center">
+          <div className="reveal mx-auto max-w-2xl text-center">
             <span className="chip bg-gold-100 text-gold-700">
-              <Ticket className="h-3.5 w-3.5" />
-              Redeemable, anytime
+              <Gift className="h-3.5 w-3.5" />
+              The 4 gifts
             </span>
-            <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
-              Your little coupon book
-            </h3>
-            <p className="mt-3 font-body text-wine-500/80">
-              Tap to claim. No expiry — I’m good for it.
-            </p>
+            <h2 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
+              You said you wanted all four.{' '}
+              <span className="text-gradient-rose">So I chose all four for you.</span>
+            </h2>
           </div>
 
-          {/* Featured link coupon — full width, always visible */}
-          {coupons.map((c, i) => {
-            if (!c.url) return null;
-            return (
-              <div key={c.title} className="reveal mb-5">
-                <a
-                  href={c.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative flex items-start gap-4 overflow-hidden rounded-3xl bg-gradient-to-br from-wine-700 to-rose-600 p-6 text-left text-white shadow-card transition-all duration-500 hover:-translate-y-1 hover:shadow-glow sm:p-7"
-                >
-                  <span className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-gold-300 to-rose-300" />
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white/15 text-gold-200 shadow-soft ring-1 ring-white/20">
-                    <c.icon className="h-6 w-6" />
-                  </span>
-                  <div className="flex-1">
-                    <h4 className="font-display text-lg font-semibold text-white sm:text-xl">
-                      {c.title}
-                    </h4>
-                    <p className="mt-1.5 font-body text-sm leading-relaxed text-cream-100/85">
-                      {c.body}
-                    </p>
-                    <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-gold-200 ring-1 ring-white/20 transition-all group-hover:bg-white/25">
-                      <ExternalLink className="h-3 w-3" />
-                      Tap to open
-                    </span>
-                  </div>
-                </a>
-              </div>
-            );
-          })}
+          {/* The screenshot */}
+          <div className="reveal mt-10 overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-rose-100 sm:p-4">
+            <img
+              src="/image.png"
+              alt="Screenshot showing Aanya chose all four gift options"
+              className="w-full rounded-2xl object-contain"
+              loading="lazy"
+            />
+            <p className="mt-3 text-center font-body text-sm italic text-wine-500/70">
+              "Pick one type of gift" — she picked all four. Obviously. 😂
+            </p>
+          </div>
+        </div>
+      </section>
 
-          {/* Scratch coupons — clean 2×2 grid */}
-          <div className="grid gap-5 sm:grid-cols-2">
-            {coupons.map((c, i) => {
-              if (c.url) return null;
-              const isClaimed = claimed.includes(i);
-              return (
-                <div key={c.title} className="reveal">
-                  <button
-                    onClick={() => isClaimed && fire(10)}
-                    className={[
-                      'group relative flex h-full w-full items-start gap-4 overflow-hidden rounded-3xl p-6 text-left transition-all duration-500',
-                      isClaimed
-                        ? 'bg-white ring-2 ring-emerald-300'
-                        : 'bg-white shadow-soft hover:-translate-y-1 hover:shadow-card',
-                    ].join(' ')}
-                  >
-                    {/* perforated edge */}
-                    <span className="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-rose-400 to-gold-400" />
-                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
-                      <c.icon className="h-6 w-6" />
-                    </span>
-                    <div className="flex-1">
-                      <h4 className="font-display text-lg font-semibold text-wine-700">
-                        {c.title}
-                      </h4>
-                      <p className="mt-1.5 font-body text-sm leading-relaxed text-wine-500/90">
-                        {c.body}
-                      </p>
-                      <span
+      {/* ─── GIFT A: Something handmade — This website ─── */}
+      <section className="px-6 pb-16 animate-fade-in">
+        <div className="mx-auto max-w-5xl rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
+          <div className="flex items-start gap-4">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
+              <Gift className="h-6 w-6" />
+            </span>
+            <div>
+              <span className="chip bg-gold-100 text-gold-700 text-xs">Gift A</span>
+              <h3 className="mt-2 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
+                Something handmade — This website
+              </h3>
+              <p className="mt-3 font-body text-base leading-relaxed text-wine-500/90">
+                I created this website for you by my own hands, my time, and my thoughts — because I wanted to make something that exists only for you. Not a forwarded wish, not a bought gift. Something I built from scratch, just for you.
+              </p>
+            </div>
+          </div>
+
+          {/* Nested Playlist & Coupon Book directly inside Gift A */}
+          <div className="mt-10 grid gap-8 lg:grid-cols-2 border-t border-rose-100 pt-10">
+            {/* Playlist */}
+            <div className="reveal">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-rose-500 text-white shadow-soft">
+                  <Music2 className="h-5 w-5" />
+                </span>
+                <div>
+                  <h4 className="font-display text-lg font-semibold text-wine-700">
+                    Songs and shows that remind me of you
+                  </h4>
+                  <p className="font-body text-xs text-wine-500/70">
+                    Press play — these are from our conversations.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100">
+                <iframe
+                  className="aspect-[16/9] w-full"
+                  src="https://www.youtube.com/embed/xitd9mEZIHk"
+                  title="Mast Magan"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+
+              <a
+                href="https://www.youtube.com/results?search_query=love+songs+playlist"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-1.5 font-body text-sm font-medium text-rose-600 transition-all hover:gap-2.5"
+              >
+                Open more songs
+                <ExternalLink className="h-4 w-4" />
+              </a>
+
+              {/* Track list */}
+              <div className="mt-6 rounded-2xl bg-wine-700 p-6 text-cream-100 shadow-card">
+                <h5 className="font-display text-base font-semibold text-white">The track list</h5>
+                <ul className="mt-4 divide-y divide-white/10 text-sm">
+                  {playlist.map((t, i) => (
+                    <li key={t.title} className="flex items-start gap-3 py-2.5">
+                      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/10 font-display text-xs text-gold-300">
+                        {i + 1}
+                      </span>
+                      <div>
+                        <p className="font-body font-medium text-white">{t.title}</p>
+                        <p className="font-body text-xs text-cream-200/60">{t.artist}</p>
+                        <p className="mt-1 font-body text-xs italic text-cream-200/80">{t.note}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Coupons */}
+            <div className="reveal">
+              <div className="flex items-center gap-3">
+                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gold-500 text-white shadow-soft">
+                  <Ticket className="h-5 w-5" />
+                </span>
+                <div>
+                  <h4 className="font-display text-lg font-semibold text-wine-700">
+                    Your little coupon book
+                  </h4>
+                  <p className="font-body text-xs text-wine-500/70">
+                    Tap to claim / scratch. No expiry.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-4">
+                {/* Featured link coupon */}
+                {coupons.map((c, i) => {
+                  if (!c.url) return null;
+                  return (
+                    <a
+                      key={c.title}
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative flex items-start gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-wine-700 to-rose-600 p-4 text-left text-white shadow-soft transition-all duration-300 hover:shadow-card"
+                    >
+                      <span className="absolute left-0 top-0 h-full w-1 bg-gold-300" />
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-200 shadow-soft">
+                        <c.icon className="h-5 w-5" />
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-display text-sm font-semibold text-white truncate">{c.title}</h5>
+                        <p className="mt-0.5 font-body text-xs text-cream-100/85 leading-relaxed">{c.body}</p>
+                      </div>
+                    </a>
+                  );
+                })}
+
+                {/* Scratch coupons */}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {coupons.map((c, i) => {
+                    if (c.url) return null;
+                    const isClaimed = claimed.includes(i);
+                    return (
+                      <button
+                        key={c.title}
+                        onClick={() => isClaimed && fire(10)}
                         className={[
-                          'mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium',
+                          'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300',
                           isClaimed
-                            ? 'bg-emerald-100 text-emerald-700'
-                            : 'bg-rose-100 text-rose-600 group-hover:bg-rose-200',
+                            ? 'bg-cream-100 ring-1 ring-emerald-300'
+                            : 'bg-cream-50 hover:bg-cream-100 shadow-soft',
                         ].join(' ')}
                       >
-                        {isClaimed ? (
-                          <>
-                            <CheckCircle2 className="h-3 w-3" />
-                            Claimed — redeem anytime
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="h-3 w-3" />
-                            Scratch to claim
-                          </>
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Claimed ribbon + shimmer — stays visible */}
-                    {isClaimed && (
-                      <>
-                        <div className="pointer-events-none absolute -right-12 top-4 rotate-45 ribbon-pop bg-emerald-500 px-10 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-soft">
-                          Claimed
+                        <span className="absolute left-0 top-0 h-full w-1 bg-rose-400" />
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600 shadow-soft">
+                          <c.icon className="h-4 w-4" />
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <h5 className="font-display text-sm font-semibold text-wine-700 truncate">{c.title}</h5>
+                          <p className="mt-0.5 font-body text-xs text-wine-500/85 leading-relaxed">{c.body}</p>
                         </div>
-                        <div className="claimed-shimmer pointer-events-none absolute inset-0 rounded-3xl" />
-                      </>
-                    )}
-
-                    {/* Scratch foil — only while unclaimed */}
-                    {!isClaimed && (
-                      <ScratchOverlay onReveal={() => claim(i)} />
-                    )}
-                  </button>
+                        {isClaimed ? (
+                          <div className="absolute right-1 top-1 rounded-full bg-emerald-100 p-0.5 text-emerald-700">
+                            <CheckCircle2 className="h-3 w-3" />
+                          </div>
+                        ) : (
+                          <ScratchOverlay onReveal={() => claim(i)} />
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
+              </div>
 
-          <div className="reveal mt-8 flex flex-wrap items-center justify-center gap-3">
-            <button
-              onClick={downloadKeepsake}
-              disabled={generating}
-              className="btn-ghost disabled:opacity-60"
-            >
-              <Download className="h-4 w-4" />
-              {generating ? 'Preparing keepsake…' : 'Download keepsake'}
-            </button>
-            <button
-              onClick={rollLuckyNumber}
-              disabled={luckyStage === 'rolling'}
-              className="btn-primary disabled:opacity-60"
-            >
-              <Sparkles className="h-4 w-4" />
-              {luckyStage === 'idle'
-                ? "What's my lucky number?"
-                : luckyStage === 'rolling'
-                  ? 'Rolling…'
-                  : 'Roll again'}
-            </button>
-          </div>
+              {/* Keepsake & Lucky number actions */}
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                <button
+                  onClick={downloadKeepsake}
+                  disabled={generating}
+                  className="btn-ghost text-xs px-4 py-2 disabled:opacity-60"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {generating ? 'Preparing keepsake…' : 'Download keepsake'}
+                </button>
+                <button
+                  onClick={rollLuckyNumber}
+                  disabled={luckyStage === 'rolling'}
+                  className="btn-primary text-xs px-4 py-2 disabled:opacity-60"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {luckyStage === 'idle'
+                    ? "Lucky number?"
+                    : luckyStage === 'rolling'
+                      ? 'Rolling…'
+                      : 'Roll again'}
+                </button>
+              </div>
 
-          {/* Lucky number → digital tulips reveal */}
-          {luckyStage !== 'idle' && (
-            <div
-              key={luckyStage === 'rolling' ? 'rolling' : `revealed-${revealKey}`}
-              className="lucky-panel-in mt-8 rounded-3xl bg-white p-8 text-center shadow-soft ring-1 ring-gold-100"
-            >
-              {luckyStage === 'rolling' ? (
-                <>
-                  <p className="font-body text-sm text-wine-500/70">
-                    Finding your lucky number…
-                  </p>
-                  <p className="mt-2 font-display text-6xl font-bold tabular-nums text-rose-600">
-                    {rollingDisplay}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="font-body text-sm text-wine-500/70">
-                    Surprise! Your lucky number is
-                  </p>
-                  <p className="mt-1 font-display text-6xl font-bold text-gradient-gold">
-                    {luckyNumber}
-                  </p>
-                  <p className="mt-2 font-body text-sm italic text-wine-500/70">
-                    Now watch — every little piece of you, blooming into one beautiful flower.
-                  </p>
-                  <PhotoTulipMorph key={revealKey} startDelay={0} />
-                </>
+              {/* Lucky number panel */}
+              {luckyStage !== 'idle' && (
+                <div
+                  key={luckyStage === 'rolling' ? 'rolling' : `revealed-${revealKey}`}
+                  className="lucky-panel-in mt-6 rounded-2xl bg-cream-50 p-6 text-center shadow-soft ring-1 ring-gold-100"
+                >
+                  {luckyStage === 'rolling' ? (
+                    <>
+                      <p className="font-body text-xs text-wine-500/70">Finding your lucky number…</p>
+                      <p className="mt-1 font-display text-4xl font-bold tabular-nums text-rose-600">
+                        {rollingDisplay}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-body text-xs text-wine-500/70">Your lucky number is</p>
+                      <p className="mt-0.5 font-display text-4xl font-bold text-gradient-gold">
+                        {luckyNumber}
+                      </p>
+                      <p className="mt-1.5 font-body text-xs italic text-wine-500/70">
+                        Now watch — every little piece of you, blooming into one beautiful flower.
+                      </p>
+                      <PhotoTulipMorph key={revealKey} startDelay={0} />
+                    </>
+                  )}
+                </div>
               )}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* Offline AI companion */}
+      {/* ─── GIFT B: A meaningful experience — Offline AI Companion ─── */}
       <section className="px-6 pb-16">
-        <div className="reveal mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
+        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
           <div className="grid items-center gap-8 md:grid-cols-5">
             <div className="md:col-span-3">
               <span className="chip bg-rose-100 text-rose-600">
                 <Bot className="h-3.5 w-3.5" />
-                Always with you
+                Gift B
               </span>
-              <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
-                A little companion that never needs the internet
+              <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
+                A meaningful experience — Offline AI Companion
               </h3>
-              <p className="mt-4 font-body text-lg leading-relaxed text-wine-500/90">
-                Remember when we talked about the protests, and the internet just… wasn't there? That can happen anytime. So I made you something for those moments — an offline AI you can talk to. Big important questions, tiny everyday issues, anything on your mind. It lives on your phone, no signal needed, no one watching.
+              <p className="mt-4 font-body text-base leading-relaxed text-wine-500/90">
+                I made you an AI companion that works even without the internet. Remember when we talked about the protests, and the internet just… wasn't there? That can happen anytime. So I made you something for those moments — an offline AI you can talk to. Big important questions, tiny everyday issues, anything on your mind. It lives on your phone, no signal needed, no one watching.
               </p>
-              <p className="mt-3 font-body text-base leading-relaxed text-wine-500/80">
+              <p className="mt-3 font-body text-sm leading-relaxed text-wine-500/80">
                 Think of it as a small piece of me that's always in your pocket — staying with you, along with me, always. Even when the world goes quiet, you've still got someone to ask.
               </p>
-              <p className="mt-3 font-body text-sm italic text-rose-600/90">
+              <p className="mt-3 font-body text-xs italic text-rose-600/90">
                 And before you say it — I know, I know, "you don't have storage" for another app 😂 So I didn't send an app. I built you a whole website instead. For you. Only you. Always yours.
               </p>
               <a
@@ -611,6 +604,39 @@ export function GiftsPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ─── GIFT C: Something you've wanted forever — Living Time Capsule ─── */}
+      <section className="px-6 pb-16">
+        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-wine-700 via-rose-600 to-gold-600 p-10 text-center text-white shadow-card sm:p-14">
+          <Infinity className="mx-auto h-10 w-10 animate-heart-beat text-gold-200" />
+          <span className="chip bg-white/10 text-cream-100 text-xs">Gift C</span>
+          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+            Something you've wanted forever — This website isn't finished.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-cream-100/90">
+            This is something that starts with your birthday, but it doesn't end here.
+            I'm going to keep adding to this — new photos, new memories, new notes, new
+            milestones — for as long as we're us. Which is forever.
+          </p>
+          <p className="mx-auto mt-5 max-w-xl font-body text-base text-cream-100/80">
+            One day, our kids can open this website and see how special their mom was to
+            their father and how our story started.
+          </p>
+        </div>
+      </section>
+
+      {/* ─── GIFT D: Kiss ─── */}
+      <section className="px-6 pb-16">
+        <div className="reveal mx-auto max-w-xl overflow-hidden rounded-3xl bg-white p-8 text-center shadow-soft border border-rose-100">
+          <span className="text-4xl">😘</span>
+          <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700">
+            Gift D — Kiss
+          </h3>
+          <p className="mt-3 font-body text-base text-wine-500/90">
+            The kiss gift will soon come to you. 😘
+          </p>
         </div>
       </section>
 
