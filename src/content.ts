@@ -287,7 +287,7 @@ export const playlist: { title: string; artist: string; note: string }[] = [
   { title: 'Yeh Jawaani Hai Deewani', artist: 'Pritam', note: 'The movie we talked about. The one that feels like us — adventure, friendship, and choosing each other.' },
   { title: 'Laughter Chefs', artist: 'TV Show OST', note: 'You were watching it, you said "mazza aaya tha mujhe dekhne mein wo." Hopefully the show continues and we can cook togther laugh on the jokes and sit on and make it couch-watch list.' },
   { title: 'Friends (Theme)', artist: 'The Rembrandts', note: 'Your Favorite multi time watch, will definitly want to see this together.' },
-  { title: 'Modern Family', artist: 'TV Show OST', note: 'The show I sent you the reel about. Three generations, everyday chaos, lots of love. Basically us in a few years.' },
+  { title: 'Marvel Avengers Marathon', artist: 'Marvel Cinematic Universe', note: 'So we have our plan set of watching the Marvel movies this time together and sleeping is definitely not an option!' },
   { title: 'Big Bang Theory', artist: 'Barenaked Ladies', note: 'You sent me this reel too. "Bazinga." You called me a nerd and I said "sure if I\'m a nerd. Nerd X Baddie you said Huh."' },
 ];
 
@@ -311,12 +311,6 @@ export const coupons: { icon: ComponentType<{ className?: string }>; title: stri
     icon: Music2,
     title: 'Eat Off My Plate',
     body: 'You always want what I\'m eating. I said I\'d let you eat off my plate, and if you want more, we\'ll order one more. This coupon makes that official policy for life.',
-  },
-  {
-    icon: Navigation,
-    title: 'Get Me Home — Always',
-    body: 'I don\'t want you to ever be lost. Remember when I told you to download offline maps and you complained about the memory? So I built this — it gives you an idea of how to always get home and to your family, even with no signal. Hoping you never have to use it, but making it just in case you do. Tap to open it.',
-    url: 'https://aanya-ai.pages.dev/#get-me-home',
   },
 ];
 

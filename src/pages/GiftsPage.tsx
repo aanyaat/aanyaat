@@ -42,6 +42,8 @@ export function GiftsPage() {
   const { canvasRef, fire } = useConfetti(true);
   const [claimed, setClaimed] = useState<number[]>([]);
   const [generating, setGenerating] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState(0);
+  const [kisses, setKisses] = useState(0);
   const keepsakeCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Lucky-number-into-tulips state
@@ -320,7 +322,7 @@ export function GiftsPage() {
       `}</style>
 
       {/* ─── THE 4 GIFTS EXPERIENCE ─── */}
-      <section className="px-6 pt-32 pb-10 sm:pt-40">
+      <section className="px-6 pt-24 pb-8 sm:pt-28">
         <div className="mx-auto max-w-3xl">
           <div className="reveal mx-auto max-w-2xl text-center">
             <span className="chip bg-gold-100 text-gold-700">
@@ -334,7 +336,7 @@ export function GiftsPage() {
           </div>
 
           {/* The screenshot */}
-          <div className="reveal mt-10 overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-rose-100 sm:p-4">
+          <div className="reveal mt-8 overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-rose-100 sm:p-4">
             <img
               src="/image.png"
               alt="Screenshot showing Aanya chose all four gift options"
@@ -350,7 +352,7 @@ export function GiftsPage() {
 
       {/* ─── GIFT A: Something handmade — This website ─── */}
       <section className="px-6 pb-16 animate-fade-in">
-        <div className="mx-auto max-w-5xl rounded-[2rem] bg-white p-8 shadow-soft sm:p-10">
+        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-white p-8 shadow-soft sm:p-10 border-t-4 border-t-rose-400">
           <div className="flex items-start gap-4">
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
               <Gift className="h-6 w-6" />
@@ -384,7 +386,7 @@ export function GiftsPage() {
                 </div>
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100">
+              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100 bg-black/5">
                 <iframe
                   className="aspect-[16/9] w-full"
                   src="https://www.youtube.com/embed/xitd9mEZIHk"
@@ -406,22 +408,48 @@ export function GiftsPage() {
                 <ExternalLink className="h-4 w-4" />
               </a>
 
-              {/* Track list */}
-              <div className="mt-6 rounded-2xl bg-wine-700 p-6 text-cream-100 shadow-card">
-                <h5 className="font-display text-base font-semibold text-white">The track list</h5>
-                <ul className="mt-4 divide-y divide-white/10 text-sm">
-                  {playlist.map((t, i) => (
-                    <li key={t.title} className="flex items-start gap-3 py-2.5">
-                      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/10 font-display text-xs text-gold-300">
-                        {i + 1}
-                      </span>
-                      <div>
-                        <p className="font-body font-medium text-white">{t.title}</p>
-                        <p className="font-body text-xs text-cream-200/60">{t.artist}</p>
-                        <p className="mt-1 font-body text-xs italic text-cream-200/80">{t.note}</p>
-                      </div>
-                    </li>
-                  ))}
+              {/* Interactive Jukebox Track List */}
+              <div className="mt-6 rounded-2xl bg-wine-800 p-6 text-cream-100 shadow-card border border-wine-700">
+                <div className="flex items-center justify-between mb-4">
+                  <h5 className="font-display text-base font-semibold text-white">The track list</h5>
+                  <span className="text-[11px] font-semibold text-gold-300 uppercase tracking-wider">Tap to view memory note</span>
+                </div>
+                <ul className="space-y-2 text-sm">
+                  {playlist.map((t, i) => {
+                    const isSelected = selectedTrack === i;
+                    return (
+                      <li
+                        key={t.title}
+                        onClick={() => setSelectedTrack(i)}
+                        className={[
+                          'flex flex-col p-3 rounded-xl transition-all duration-300 cursor-pointer border',
+                          isSelected
+                            ? 'bg-white/15 border-gold-400/50 shadow-md ring-1 ring-gold-400/30'
+                            : 'bg-white/5 border-transparent hover:bg-white/10',
+                        ].join(' ')}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className={['grid h-6 w-6 shrink-0 place-items-center rounded-full font-display text-xs', isSelected ? 'bg-gold-400 text-wine-900 font-bold' : 'bg-white/10 text-gold-300'].join(' ')}>
+                            {i + 1}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-body font-medium text-white truncate">{t.title}</p>
+                            <p className="font-body text-xs text-cream-200/60">{t.artist}</p>
+                          </div>
+                          {isSelected && (
+                            <span className="flex h-2 w-2 rounded-full bg-gold-400 animate-pulse shrink-0" />
+                          )}
+                        </div>
+                        {isSelected && (
+                          <div className="mt-2.5 pt-2 border-t border-white/10 animate-fade-in">
+                            <p className="font-handwriting text-base text-gold-200 italic leading-snug">
+                              "{t.note}"
+                            </p>
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -442,65 +470,39 @@ export function GiftsPage() {
                 </div>
               </div>
 
-              <div className="mt-6 space-y-4">
-                {/* Featured link coupon */}
+              {/* Scratch coupons */}
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 {coupons.map((c, i) => {
-                  if (!c.url) return null;
+                  const isClaimed = claimed.includes(i);
                   return (
-                    <a
+                    <button
                       key={c.title}
-                      href={c.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group relative flex items-start gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-wine-700 to-rose-600 p-4 text-left text-white shadow-soft transition-all duration-300 hover:shadow-card"
+                      onClick={() => isClaimed && fire(10)}
+                      className={[
+                        'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300',
+                        isClaimed
+                          ? 'bg-cream-100 ring-1 ring-emerald-300'
+                          : 'bg-cream-50 hover:bg-cream-100 shadow-soft',
+                      ].join(' ')}
                     >
-                      <span className="absolute left-0 top-0 h-full w-1 bg-gold-300" />
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold-200 shadow-soft">
-                        <c.icon className="h-5 w-5" />
+                      <span className="absolute left-0 top-0 h-full w-1 bg-rose-400" />
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600 shadow-soft">
+                        <c.icon className="h-4 w-4" />
                       </span>
                       <div className="flex-1 min-w-0">
-                        <h5 className="font-display text-sm font-semibold text-white truncate">{c.title}</h5>
-                        <p className="mt-0.5 font-body text-xs text-cream-100/85 leading-relaxed">{c.body}</p>
+                        <h5 className="font-display text-sm font-semibold text-wine-700 truncate">{c.title}</h5>
+                        <p className="mt-0.5 font-body text-xs text-wine-500/85 leading-relaxed">{c.body}</p>
                       </div>
-                    </a>
+                      {isClaimed ? (
+                        <div className="absolute right-2 top-2 rounded-full bg-emerald-100 p-0.5 text-emerald-700">
+                          <CheckCircle2 className="h-3.5 w-3.5" />
+                        </div>
+                      ) : (
+                        <ScratchOverlay onReveal={() => claim(i)} />
+                      )}
+                    </button>
                   );
                 })}
-
-                {/* Scratch coupons */}
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {coupons.map((c, i) => {
-                    if (c.url) return null;
-                    const isClaimed = claimed.includes(i);
-                    return (
-                      <button
-                        key={c.title}
-                        onClick={() => isClaimed && fire(10)}
-                        className={[
-                          'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300',
-                          isClaimed
-                            ? 'bg-cream-100 ring-1 ring-emerald-300'
-                            : 'bg-cream-50 hover:bg-cream-100 shadow-soft',
-                        ].join(' ')}
-                      >
-                        <span className="absolute left-0 top-0 h-full w-1 bg-rose-400" />
-                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600 shadow-soft">
-                          <c.icon className="h-4 w-4" />
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <h5 className="font-display text-sm font-semibold text-wine-700 truncate">{c.title}</h5>
-                          <p className="mt-0.5 font-body text-xs text-wine-500/85 leading-relaxed">{c.body}</p>
-                        </div>
-                        {isClaimed ? (
-                          <div className="absolute right-1 top-1 rounded-full bg-emerald-100 p-0.5 text-emerald-700">
-                            <CheckCircle2 className="h-3 w-3" />
-                          </div>
-                        ) : (
-                          <ScratchOverlay onReveal={() => claim(i)} />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
 
               {/* Keepsake & Lucky number actions */}
@@ -661,42 +663,56 @@ export function GiftsPage() {
 
       {/* ─── GIFT D: Kiss ─── */}
       <section className="px-6 pb-16">
-        <div className="reveal mx-auto max-w-xl overflow-hidden rounded-3xl bg-white p-8 text-center shadow-soft border border-rose-100">
-          <span className="text-4xl">😘</span>
+        <div
+          onClick={() => {
+            setKisses((k) => k + 1);
+            fire(35);
+          }}
+          className="reveal mx-auto max-w-xl overflow-hidden rounded-3xl bg-white p-8 text-center shadow-soft border border-rose-100 hover:shadow-card hover:scale-102 transition-all duration-300 cursor-pointer group"
+        >
+          <span className="text-5xl block animate-heart-beat">😘</span>
           <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700">
             Gift D — Kiss
           </h3>
           <p className="mt-3 font-body text-base text-wine-500/90">
             The kiss gift will soon come to you. 😘
           </p>
+          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-4 py-1.5 text-xs font-bold text-rose-600 border border-rose-100">
+            <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" />
+            <span>
+              {kisses === 0 ? 'Tap to send a kiss' : `${kisses} ${kisses === 1 ? 'kiss' : 'kisses'} sent! ❤️`}
+            </span>
+          </div>
         </div>
       </section>
 
       {/* Final celebration banner */}
       <section className="px-6 pb-24">
-        <div className="reveal mx-auto max-w-3xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-wine-700 via-rose-600 to-gold-600 p-10 text-center text-white shadow-card sm:p-14">
+        <div className="reveal mx-auto max-w-3xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-wine-700 via-rose-600 to-gold-600 p-10 text-center text-white shadow-card sm:p-14 border border-rose-400/30">
           <Sparkles className="mx-auto h-10 w-10 animate-heart-beat text-gold-200" />
           <h2 className="mt-5 font-display text-4xl font-bold sm:text-5xl">
             Happy Birthday, {person.name}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-cream-100/90">
+          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-cream-100/90 leading-relaxed">
             That's the whole site — every page, every word, made for you. You know me a little too much, and I wouldn't have it any other way. Now let's go have the real day. I Miss You
           </p>
           <p className="mx-auto mt-5 max-w-xl rounded-2xl bg-white/10 px-6 py-4 font-body text-base italic text-cream-100/90 ring-1 ring-white/20">
             "Aree Baba ye toh bas first step hai Next toh aapke liye Dress Select Karna hai, Jo bhi pasand hai yaad se bhej dena — I want to see you in it, something which i bought for my ladyy"
           </p>
-          <a
-            href="https://www.amazon.in/s?k=clothes+for+girlfriend+birthday+gift"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-7 py-3 font-body font-medium text-white ring-1 ring-white/30 transition-all duration-300 hover:bg-white/25 hover:ring-white/50"
-          >
-            <ExternalLink className="h-4 w-4" />
-            Browse dress ideas on Amazon
-          </a>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://www.amazon.in/s?k=clothes+for+girlfriend+birthday+gift"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-7 py-3 font-body font-medium text-white ring-1 ring-white/30 transition-all duration-300 hover:bg-white/25 hover:ring-white/50"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Browse dress ideas on Amazon
+            </a>
+          </div>
           <button
             onClick={() => fire(260)}
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-body font-medium text-rose-600 shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-glow"
+            className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-body font-bold text-rose-600 shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-glow cursor-pointer"
           >
             <Sparkles className="h-4 w-4" />
             One more round of confetti
