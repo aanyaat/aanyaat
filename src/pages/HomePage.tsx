@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { ArrowRight, Gift, HelpCircle, MapPin, Sparkles, Music2, Heart } from 'lucide-react';
-import { heroImage, nav, person, wishes } from '@/content';
+import { nav, person, wishes, memories } from '@/content';
 import { useCountdown } from '@/lib/useCountdown';
 import { useConfetti } from '@/lib/useConfetti';
 import { useRouter } from '@/lib/router';
 import { useReveal } from '@/lib/useReveal';
 import { CountdownDisplay } from '@/components/CountdownDisplay';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
-import { memories } from '@/content';
+import { ThreeDPhotoExperience } from '@/components/ThreeDPhotoExperience';
 
 export function HomePage() {
   const cd = useCountdown(person.birthday);
@@ -40,33 +40,31 @@ export function HomePage() {
     <>
       <ConfettiOverlay canvasRef={canvasRef} />
 
-      {/* HERO */}
+      {/* ─── 3D PHOTO EXPERIENCE BACKGROUND LAYER ─── */}
+      <ThreeDPhotoExperience />
+
+      {/* ─── HERO WITH 3D ORBITING PHOTOS ─── */}
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={heroImage}
-            alt="A couple sharing a kiss at sunset."
-            className="h-full w-full object-cover"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-wine-900/70 via-wine-800/55 to-wine-900/85" />
-          <div className="absolute inset-0 bg-rose-radial opacity-70" />
-        </div>
+        {/* Soft atmospheric gradient to give depth while keeping 3D photos visible */}
+        <div className="absolute inset-0 bg-gradient-to-b from-wine-950/40 via-transparent to-wine-950/60 pointer-events-none" />
 
-        <div className="relative z-10 mx-auto max-w-3xl px-6 py-32 text-center">
-          <span className="chip mx-auto animate-fade-in bg-white/15 text-cream-100 backdrop-blur-sm">
-            <Sparkles className="h-3.5 w-3.5" />
-            A surprise, just for you
-          </span>
+        {/* Hero Content */}
+        <div className="relative z-10 mx-auto max-w-3xl px-6 py-28 text-center">
+          <div className="flex flex-col items-center gap-2">
+            <span className="chip animate-fade-in bg-white/40 text-wine-900 backdrop-blur-xl border border-white/60 shadow-soft">
+              <Sparkles className="h-3.5 w-3.5 text-gold-600" />
+              A surprise for the birthday queen
+            </span>
+          </div>
 
-          <h1 className="mt-6 animate-fade-up font-display text-5xl font-bold leading-[1.05] text-white drop-shadow-lg sm:text-7xl">
+          <h1 className="mt-6 animate-fade-up font-display text-5xl font-bold leading-[1.05] text-wine-900 drop-shadow-sm sm:text-7xl">
             Happy Birthday,
             <br />
-            <span className="text-gradient-gold">{person.name}</span>
+            <span className="text-gradient-rose">{person.name}</span>
           </h1>
 
           <p
-            className="mx-auto mt-6 max-w-xl animate-fade-up font-body text-lg leading-relaxed text-cream-100/90 sm:text-xl"
+            className="mx-auto mt-6 max-w-xl animate-fade-up font-body text-lg leading-relaxed text-wine-800/90 sm:text-xl font-medium"
             style={{ animationDelay: '0.15s' }}
           >
             {person.nickname}, a simple birthday message wasn't enough. So I built
@@ -75,14 +73,14 @@ export function HomePage() {
           </p>
 
           <div
-            className="mt-10 animate-fade-up"
+            className="mt-8 animate-fade-up"
             style={{ animationDelay: '0.3s' }}
           >
             <CountdownDisplay cd={cd} />
           </div>
 
           <div
-            className="mt-10 flex animate-fade-up flex-wrap items-center justify-center gap-3"
+            className="mt-8 flex animate-fade-up flex-wrap items-center justify-center gap-3"
             style={{ animationDelay: '0.45s' }}
           >
             <button
@@ -90,14 +88,14 @@ export function HomePage() {
                 fire(120);
                 navigate('/about');
               }}
-              className="btn-primary"
+              className="btn-primary shadow-soft"
             >
               Start the tour
               <ArrowRight className="h-4 w-4" />
             </button>
             <button
               onClick={() => fire(80)}
-              className="btn-ghost bg-white/15 text-white border-white/30 hover:bg-white/25 hover:border-white/50"
+              className="btn-ghost bg-white/50 text-wine-800 border-white/60 hover:bg-white/80 backdrop-blur-md shadow-soft"
             >
               <Sparkles className="h-4 w-4" />
               Throw confetti
@@ -105,29 +103,29 @@ export function HomePage() {
           </div>
 
           {!cd.isToday && (
-            <p className="mt-12 animate-fade-in font-body text-sm text-cream-200/70">
+            <p className="mt-8 animate-fade-in font-body text-xs text-wine-600/80 font-medium">
               Countdown to {person.birthDateDisplay} — your day is almost here.
             </p>
           )}
         </div>
 
-        {/* scroll cue */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
-          <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/40 p-1.5">
-            <span className="h-2 w-1 animate-float rounded-full bg-white/70" />
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+          <div className="flex h-9 w-5 items-start justify-center rounded-full border-2 border-wine-400/50 p-1">
+            <span className="h-2 w-1 animate-float rounded-full bg-rose-500" />
           </div>
         </div>
       </section>
 
-      {/* PREVIEW CARDS */}
-      <section ref={previewRef} className="relative bg-cream-100 pb-4">
+      {/* ─── PREVIEW CARDS (FROSTED GLASS ON TOP OF 3D PHOTOS) ─── */}
+      <section ref={previewRef} className="relative pb-16 z-10">
         <div className="mx-auto max-w-6xl px-6">
           <div className="reveal mx-auto max-w-2xl pt-16 text-center">
-            <span className="chip bg-rose-100 text-rose-600">What's inside</span>
+            <span className="chip bg-rose-100/90 text-rose-600 border border-white/60 shadow-soft">What's inside</span>
             <h2 className="mt-4 font-display text-4xl font-semibold text-wine-700 sm:text-5xl">
               A few rooms, made just for you
             </h2>
-            <p className="mt-4 font-body text-lg text-wine-500/80">
+            <p className="mt-4 font-body text-lg text-wine-600/85">
               Take it slow. Each page is a different way of saying the same thing — that you matter to me.
             </p>
           </div>
@@ -137,19 +135,19 @@ export function HomePage() {
               <button
                 key={p.path}
                 onClick={() => navigate(p.path)}
-                className="reveal group relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card"
+                className="reveal group relative overflow-hidden rounded-3xl bg-white/50 backdrop-blur-xl p-8 text-left shadow-card border border-white/70 transition-all duration-500 hover:-translate-y-1.5 hover:bg-white/75 hover:shadow-glow cursor-pointer"
               >
-                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-rose-100/60 blur-2xl transition-opacity duration-500 group-hover:opacity-100 opacity-60" />
-                <span className="relative grid h-12 w-12 place-items-center rounded-2xl bg-rose-500 text-white shadow-soft transition-transform duration-500 group-hover:scale-110">
+                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-rose-200/50 blur-2xl transition-opacity duration-500 group-hover:opacity-100 opacity-60" />
+                <span className="relative grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft transition-transform duration-500 group-hover:scale-110">
                   <p.icon className="h-6 w-6" />
                 </span>
                 <h3 className="relative mt-6 font-display text-2xl font-semibold text-wine-700">
                   {p.label}
                 </h3>
-                <p className="relative mt-2 font-body text-sm text-wine-500/70">
+                <p className="relative mt-2 font-body text-sm text-wine-600/80">
                   {p.hint}
                 </p>
-                <span className="relative mt-5 inline-flex items-center gap-1.5 font-body text-sm font-medium text-rose-600 transition-all duration-300 group-hover:gap-3">
+                <span className="relative mt-5 inline-flex items-center gap-1.5 font-body text-sm font-semibold text-rose-600 transition-all duration-300 group-hover:gap-3">
                   Open
                   <ArrowRight className="h-4 w-4" />
                 </span>
@@ -165,7 +163,7 @@ export function HomePage() {
                 <button
                   key={n.path}
                   onClick={() => navigate(n.path)}
-                  className="nav-link"
+                  className="nav-link font-medium cursor-pointer"
                 >
                   {n.label}
                 </button>

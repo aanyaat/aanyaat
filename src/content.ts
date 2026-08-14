@@ -24,8 +24,40 @@ export const person = {
   fromYou: 'yours, always — Akhil',
 };
 
-export const heroImage =
-  'https://images.pexels.com/photos/2253870/pexels-photo-2253870.jpeg?auto=compress&cs=tinysrgb&h=1200&w=2000';
+export const heroImage = '/images/gifts/flowers_mode.jpeg';
+
+export const heroBackdrops = [
+  {
+    id: 'flowers',
+    title: 'Floral Glow 🌸',
+    src: '/images/gifts/flowers_mode.jpeg',
+    caption: 'Surrounded by flowers, shining the brightest',
+  },
+  {
+    id: 'smile',
+    title: 'Warm Smile ✨',
+    src: '/images/gifts/1000087383.jpg',
+    caption: 'That pretty smile that makes everything better',
+  },
+  {
+    id: 'yellow',
+    title: 'Golden Sunshine 💛',
+    src: '/images/gifts/yellow_mode.jpeg',
+    caption: 'Pure warmth and sunshine in human form',
+  },
+  {
+    id: 'candid',
+    title: 'Sweet Candid 💖',
+    src: '/images/gifts/1000087377.jpg',
+    caption: 'Naturally gorgeous, effortless beauty',
+  },
+  {
+    id: 'boss',
+    title: 'Boss Energy 👑',
+    src: '/images/gifts/boss_mode.jpeg',
+    caption: 'Unstoppable, confident, and stunning',
+  },
+] as const;
 
 export const wishes: { icon: ComponentType<{ className?: string }>; title: string; body: string }[] = [
   {
