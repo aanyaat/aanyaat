@@ -103,9 +103,11 @@ export function HomePage() {
           </div>
 
           {!cd.isToday && (
-            <p className="mt-8 animate-fade-in font-body text-xs text-wine-600/80 font-medium">
-              Countdown to {person.birthDateDisplay} — your day is almost here.
-            </p>
+            <div className="mt-8 animate-fade-in">
+              <span className="inline-block rounded-full bg-white/70 backdrop-blur-md px-4 py-1.5 font-body text-xs text-wine-800 font-semibold border border-white/80 shadow-soft">
+                Countdown to {person.birthDateDisplay} — your day is almost here! ✨
+              </span>
+            </div>
           )}
         </div>
 
