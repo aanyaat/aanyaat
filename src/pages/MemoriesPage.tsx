@@ -256,6 +256,35 @@ export function MemoriesPage() {
     };
   }, [active, close, next, prev]);
 
+  // Helper to format date strings into "15 May 2026" (DD Mon YYYY)
+  const formatMilestoneDate = (dateStr: string): string => {
+    if (!dateStr || dateStr === 'No date') return 'No date';
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      const d = new Date(year, month, day);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      }
+    }
+    const d = new Date(dateStr);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    return dateStr;
+  };
+
+  // Chronologically sorted milestones (earliest to latest)
+  const sortedMoments = [...moments].sort((a, b) => {
+    if (!a.date || a.date === 'No date') return 1;
+    if (!b.date || b.date === 'No date') return -1;
+    const timeA = new Date(a.date).getTime() || 0;
+    const timeB = new Date(b.date).getTime() || 0;
+    return timeA - timeB;
+  });
+
   return (
     <PageShell>
       {/* ─── 3D MEMORIES SHOWCASE ─── */}
@@ -475,17 +504,17 @@ export function MemoriesPage() {
                       <p className="text-xs text-wine-500/60 truncate font-body">Our timeline milestones.</p>
                     </div>
                     <span className="bg-gold-100 text-gold-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0">
-                      {moments.length} {moments.length === 1 ? 'moment' : 'moments'}
+                      {sortedMoments.length} {sortedMoments.length === 1 ? 'moment' : 'moments'}
                     </span>
                   </div>
 
-                  {moments.length === 0 ? (
+                  {sortedMoments.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-8 text-center rounded-xl bg-cream-50/50 border border-dashed border-rose-200 px-3">
                       <p className="font-body text-xs font-medium text-wine-600">No milestones logged yet.</p>
                     </div>
                   ) : (
                     <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1 no-scrollbar">
-                      {moments.map((m, i) => (
+                      {sortedMoments.map((m, i) => (
                         <div
                           key={m.id || i}
                           className="relative flex items-center bg-white border border-rose-100 rounded-2xl overflow-hidden shadow-soft p-3 gap-3 hover:shadow-md transition-shadow"
@@ -494,8 +523,8 @@ export function MemoriesPage() {
                           <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-cream-100 border-l border-rose-100" />
                           <div className="pl-2 pr-1 flex items-center justify-between w-full gap-2">
                             <div className="flex flex-col">
-                              <span className="font-handwriting text-xs font-bold text-rose-500">
-                                {m.date}
+                              <span className="font-body text-[11px] font-bold text-rose-500 uppercase tracking-wider">
+                                {formatMilestoneDate(m.date)}
                               </span>
                               <span className="font-handwriting text-base text-wine-800 font-semibold leading-tight mt-0.5">
                                 {m.title}
@@ -503,7 +532,7 @@ export function MemoriesPage() {
                             </div>
                             <button
                               onClick={() => deleteMoment(m.id, i)}
-                              className="text-wine-400 hover:text-rose-600 transition-colors ml-auto hover:scale-110"
+                              className="text-wine-400 hover:text-rose-600 transition-colors ml-auto hover:scale-110 cursor-pointer"
                               title="Delete moment"
                             >
                               <Trash2 className="h-4 w-4" />
