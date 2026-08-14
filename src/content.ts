@@ -60,53 +60,97 @@ export const wishes: { icon: ComponentType<{ className?: string }>; title: strin
   },
 ];
 
-export const memories: {
+export interface MemoryItem {
   src: string;
+  type: 'image' | 'video';
   alt: string;
   caption: string;
   date: string;
-  span?: boolean;
-}[] = [
-    {
-      src: '/images/gifts/yellow_mode.jpeg',
-      alt: 'Aanya in a yellow saree, smiling beautifully.',
-      caption: 'You in yellow — a whole mood.',
-      date: 'Looking gorgeous as always',
-      span: true,
-    },
-    {
-      src: '/images/gifts/unbothered_mode.jpeg',
-      alt: 'Aanya in a black and purple outfit, seated.',
-      caption: 'That Mirror selfies i always wait for ',
-      date: 'The Mirror Selife The classic >>>',
-    },
-    {
-      src: '/images/gifts/flowers_mode.jpeg',
-      alt: 'Aanya holding a bouquet of sunflowers.',
-      caption: 'Flower looking at flowers',
-      date: 'Pretty little baby',
-    },
-    {
-      src: '/images/gifts/office_mode.jpeg',
-      alt: 'Aanya in a mirror selfie at the office.',
-      caption: 'Office day, full glam — you always show up',
-      date: 'Shirt ironed and everything',
-    },
-    {
-      src: '/images/gifts/boss_mode.jpeg',
-      alt: 'Aanya in a black suit at a college campus.',
-      caption: 'Full on Baddie, with deadly eyes flirting🙈',
-      date: 'Future boss lady',
-      span: true,
-    },
-    {
-      src: '/images/gifts/story_begins.jpg',
-      alt: 'Our first photo together.',
-      caption: 'Where our story quietly began with your smile.',
-      date: 'Our First Meet',
-      span: true,
-    },
-  ];
+  category: 'photos' | 'videos' | 'highlights';
+}
+
+export const memories: MemoryItem[] = [
+  {
+    src: '/images/gifts/story_begins.jpg',
+    type: 'image',
+    alt: 'Our first photo together.',
+    caption: 'Where our story quietly began with your smile',
+    date: 'Our First Meet',
+    category: 'highlights',
+  },
+  {
+    src: '/images/gifts/1000085438.mp4',
+    type: 'video',
+    alt: 'Video memory of Aanya',
+    caption: 'That smile that always makes my day',
+    date: 'Reel Moment',
+    category: 'videos',
+  },
+  {
+    src: '/images/gifts/1000087385.jpg',
+    type: 'image',
+    alt: 'Stunning portrait of Aanya',
+    caption: 'Golden hour aesthetics & pure elegance',
+    date: 'Golden Hour Vibe',
+    category: 'photos',
+  },
+  {
+    src: '/images/gifts/1000090640.mp4',
+    type: 'video',
+    alt: 'Video snapshot of Aanya',
+    caption: 'Reels and little video clips we exchange',
+    date: 'Our Thing',
+    category: 'videos',
+  },
+  {
+    src: '/images/gifts/1000087383.jpg',
+    type: 'image',
+    alt: 'Aanya smiling softly',
+    caption: 'The prettiest little smile in the room',
+    date: 'Pure Happiness',
+    category: 'photos',
+  },
+  {
+    src: '/images/gifts/1000090644.mp4',
+    type: 'video',
+    alt: 'Special reel memory of Aanya',
+    caption: 'This one always makes me smile non-stop',
+    date: 'Top Reel',
+    category: 'videos',
+  },
+  {
+    src: '/images/gifts/1000087377.jpg',
+    type: 'image',
+    alt: 'Candid photo of Aanya',
+    caption: 'Unfiltered, candid, and naturally gorgeous',
+    date: 'Candid Moment',
+    category: 'photos',
+  },
+  {
+    src: '/images/gifts/1000089005.mp4',
+    type: 'video',
+    alt: 'Short video clip of Aanya',
+    caption: 'The way you laugh and talk — 100/10 energy',
+    date: 'Live Reel',
+    category: 'videos',
+  },
+  {
+    src: '/images/gifts/1000087399.jpg',
+    type: 'image',
+    alt: 'Photo memory of Aanya',
+    caption: 'Every time I look at this photo, I just smile',
+    date: 'Sweet Memories',
+    category: 'photos',
+  },
+  {
+    src: '/images/gifts/1000090671.mp4',
+    type: 'video',
+    alt: 'Video reel memory',
+    caption: 'Forever my favorite person to make memories with',
+    date: 'Endless Love',
+    category: 'videos',
+  },
+];
 
 export const timeline: {
   date: string;

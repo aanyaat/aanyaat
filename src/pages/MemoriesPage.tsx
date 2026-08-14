@@ -10,19 +10,18 @@ import {
   Camera,
   BookOpen,
   Milestone,
+  Sparkles,
 } from 'lucide-react';
 import { memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
+import { ThreeDCarousel } from '@/components/ThreeDCarousel';
 import { useRouter } from '@/lib/router';
 import { supabase } from '@/lib/supabase';
 
 export function MemoriesPage() {
   const { navigate } = useRouter();
   const [active, setActive] = useState<number | null>(null);
-
-  // --- archive state ---
-  const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Links (Digital Photo Album)
@@ -259,73 +258,39 @@ export function MemoriesPage() {
 
   return (
     <PageShell>
-      <section className="px-6 pt-32 pb-10 sm:pt-40">
-        <div className="mx-auto max-w-3xl">
+      {/* ─── 3D MEMORIES SHOWCASE ─── */}
+      <section className="px-3 sm:px-6 pt-24 sm:pt-28 pb-16">
+        <div className="mx-auto max-w-5xl text-center mb-4 sm:mb-6">
           <SectionTitle
             eyebrow="Memories"
             title={
               <>
-                Us, in <span className="text-gradient-rose">moments</span>
+                Us, in <span className="text-gradient-rose">motion & moments</span>
               </>
             }
-            subtitle="A few moments I keep going back to. Tap any photo to see it up close."
+            subtitle="Swipe or click through our top 10 memories. Tap any card for full resolution."
           />
         </div>
-      </section>
 
-      <section className="px-6 pb-24">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {memories.map((m, i) => {
-            const rotations = ['sm:-rotate-2', 'sm:rotate-1', 'sm:-rotate-1', 'sm:rotate-2', 'sm:-rotate-3', 'sm:rotate-3'];
-            const rot = rotations[i % rotations.length];
-            return (
-              <button
-                key={m.src}
-                onClick={() => setActive(i)}
-                className={[
-                  'reveal group relative bg-white p-3 pb-8 sm:p-4 sm:pb-11 shadow-soft ring-1 ring-wine-900/5 transition-all duration-500 hover:shadow-card hover:scale-102 sm:hover:rotate-0',
-                  rot,
-                  m.span ? 'col-span-2 lg:row-span-2' : '',
-                ].join(' ')}
-                style={{ transitionDelay: `${i * 50}ms` }}
-              >
-                <div className="overflow-hidden bg-rose-50 rounded-lg">
-                  <img
-                    src={m.src}
-                    alt={m.alt}
-                    loading="lazy"
-                    className={[
-                      'w-full object-cover transition-transform duration-700 group-hover:scale-105',
-                      m.span ? 'aspect-[16/10] lg:aspect-square' : 'aspect-square',
-                    ].join(' ')}
-                  />
-                </div>
-                <div className="mt-3 text-center sm:mt-4">
-                  <p className="font-handwriting text-xl sm:text-2xl font-bold text-wine-800 leading-tight">
-                    {m.caption}
-                  </p>
-                  <p className="font-handwriting text-sm sm:text-base text-rose-500 mt-0.5">
-                    {m.date}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+        <div className="mx-auto max-w-5xl">
+          <ThreeDCarousel
+            items={memories}
+            onOpenLightbox={(index) => setActive(index)}
+          />
 
-        <div className="reveal mx-auto mt-14 max-w-xl text-center">
-          <p className="font-body text-wine-500/80">
-            These are just the ones we stopped to share. My favorite ones don't have
-            reels — they're just you, being you, when you didn't know I was paying
-            attention.
-          </p>
-          <button onClick={() => navigate('/timeline')} className="btn-primary mt-8">
-            See how we got here
-          </button>
+          <div className="reveal mx-auto mt-10 max-w-xl text-center">
+            <p className="font-body text-sm text-wine-500/80">
+              These are our top 10 moments. My favorite ones don't have reels —
+              they're just you, being you, when you didn't know I was paying attention.
+            </p>
+            <button onClick={() => navigate('/timeline')} className="btn-primary mt-6">
+              See how we got here
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* Memory Archive — interactive dashboard layout */}
+      {/* ─── LIVING ARCHIVE DASHBOARD ─── */}
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-6xl">
           <div className="reveal mx-auto mb-14 max-w-2xl text-center">
@@ -342,7 +307,7 @@ export function MemoriesPage() {
           </div>
 
           <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
-            {/* Column 1: 📝 Notes & Thoughts (span 2 on desktop) */}
+            {/* Column 1: 📝 Notes & Thoughts */}
             <div className="reveal lg:col-span-2 flex flex-col justify-between card-premium border-t-4 border-t-amber-400/80">
               <div>
                 <div className="flex items-center gap-3 pb-5 mb-6 border-b border-rose-100/50">
@@ -424,7 +389,7 @@ export function MemoriesPage() {
               </div>
             </div>
 
-            {/* Column 2: 📷 Links & 📍 Moments (stacks on desktop) */}
+            {/* Column 2: 📷 Links & 📍 Moments */}
             <div className="lg:col-span-1 flex flex-col gap-8">
               {/* 📷 Digital Photo Album */}
               <div className="reveal flex flex-col justify-between card-premium border-t-4 border-t-rose-400/80 min-h-[320px]">
@@ -589,61 +554,104 @@ export function MemoriesPage() {
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* ─── MULTIMEDIA LIGHTBOX (PHOTOS & VIDEOS) ─── */}
       {active !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-wine-900/90 p-4 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-wine-950/95 p-4 sm:p-6 backdrop-blur-2xl animate-fade-in select-none"
           onClick={close}
           role="dialog"
           aria-modal="true"
         >
-          <button
-            onClick={close}
-            className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          {/* Top Bar with High-Visibility Close Button & Counter */}
+          <div className="absolute top-4 sm:top-6 inset-x-4 sm:inset-x-8 flex items-center justify-between z-30 pointer-events-none">
+            <span className="pointer-events-auto rounded-full bg-white/20 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-md border border-white/20 shadow-md">
+              {active + 1} / {memories.length}
+            </span>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                close();
+              }}
+              className="pointer-events-auto flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-bold text-wine-900 shadow-2xl transition-all hover:bg-rose-500 hover:text-white hover:scale-105 active:scale-95 ring-2 ring-white/50 cursor-pointer"
+              aria-label="Close photo"
+            >
+              <X className="h-4 w-4 stroke-[2.5]" />
+              <span>Close</span>
+            </button>
+          </div>
+
+          {/* Previous Arrow */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               prev();
             }}
-            className="absolute left-3 grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25 sm:left-6"
+            className="absolute left-2 sm:left-6 z-30 grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-full bg-white/20 text-white shadow-lg transition-all hover:bg-white hover:text-wine-900 hover:scale-110 active:scale-95 backdrop-blur-md border border-white/20 cursor-pointer"
             aria-label="Previous"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-6 w-6 sm:h-7 sm:w-7" />
           </button>
+
+          {/* Next Arrow */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               next();
             }}
-            className="absolute right-3 grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25 sm:right-6"
+            className="absolute right-2 sm:right-6 z-30 grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-full bg-white/20 text-white shadow-lg transition-all hover:bg-white hover:text-wine-900 hover:scale-110 active:scale-95 backdrop-blur-md border border-white/20 cursor-pointer"
             aria-label="Next"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-6 w-6 sm:h-7 sm:w-7" />
           </button>
 
-          <figure
-            className="max-h-[85vh] max-w-4xl animate-bounce-in"
+          {/* Media Frame */}
+          <div
+            className="max-h-[85vh] max-w-4xl w-full animate-bounce-in flex flex-col items-center justify-center my-auto px-2"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={memories[active].src}
-              alt={memories[active].alt}
-              className="mx-auto max-h-[72vh] rounded-2xl object-contain shadow-card"
-            />
-            <figcaption className="mt-4 text-center">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-cream-200">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-black/60 ring-1 ring-white/20 max-h-[68vh] flex items-center justify-center">
+              {memories[active].type === 'video' ? (
+                <video
+                  key={memories[active].src}
+                  src={memories[active].src}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[68vh] max-w-full rounded-2xl object-contain"
+                />
+              ) : (
+                <img
+                  key={memories[active].src}
+                  src={memories[active].src}
+                  alt={memories[active].alt}
+                  className="max-h-[68vh] max-w-full rounded-2xl object-contain"
+                />
+              )}
+            </div>
+
+            {/* Bottom Caption & Extra Close Button for Mobile */}
+            <div className="mt-3.5 text-center max-w-xl px-4 flex flex-col items-center">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-0.5 text-xs font-semibold uppercase tracking-wider text-gold-300 backdrop-blur-sm">
                 <Calendar className="h-3 w-3" />
                 {memories[active].date}
               </span>
-              <p className="mt-2 font-display text-lg text-white">
+              <p className="mt-1.5 font-display text-base sm:text-lg text-white font-medium drop-shadow-md">
                 {memories[active].caption}
               </p>
-            </figcaption>
-          </figure>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  close();
+                }}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-4 py-1.5 text-xs font-medium text-cream-100 hover:bg-white hover:text-wine-900 transition-all border border-white/20 shadow-md cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+                Tap to close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </PageShell>
