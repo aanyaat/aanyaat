@@ -21,6 +21,7 @@ import { SectionTitle } from '@/components/SectionTitle';
 import { useConfetti } from '@/lib/useConfetti';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { ScratchOverlay } from '@/components/ScratchCard';
+import { ThreeDTulipExperience } from '@/components/ThreeDTulipExperience';
 
 type LuckyStage = 'idle' | 'rolling' | 'revealed';
 
@@ -44,6 +45,7 @@ export function GiftsPage() {
   const [generating, setGenerating] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(0);
   const [kisses, setKisses] = useState(0);
+  const [showQuizModal, setShowQuizModal] = useState(false);
   const keepsakeCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // Lucky-number-into-tulips state
@@ -253,6 +255,8 @@ export function GiftsPage() {
 
   return (
     <PageShell>
+      {/* 3D Realtime Scroll-Driven Tulip & Petal Odyssey */}
+      <ThreeDTulipExperience />
       <ConfettiOverlay canvasRef={canvasRef} />
       {/* Offscreen canvas used only to render the keepsake PNG */}
       <canvas ref={keepsakeCanvasRef} className="hidden" />
@@ -322,7 +326,7 @@ export function GiftsPage() {
       `}</style>
 
       {/* ─── THE 4 GIFTS EXPERIENCE ─── */}
-      <section className="px-6 pt-24 pb-8 sm:pt-28">
+      <section className="px-6 pt-24 pb-6 sm:pt-28">
         <div className="mx-auto max-w-3xl">
           <div className="reveal mx-auto max-w-2xl text-center">
             <span className="chip bg-gold-100 text-gold-700">
@@ -333,43 +337,81 @@ export function GiftsPage() {
               You said you wanted all four.{' '}
               <span className="text-gradient-rose">So I chose all four for you.</span>
             </h2>
-          </div>
-
-          {/* The screenshot */}
-          <div className="reveal mt-8 overflow-hidden rounded-3xl bg-white p-3 shadow-soft ring-1 ring-rose-100 sm:p-4">
-            <img
-              src="/image.png"
-              alt="Screenshot showing Aanya chose all four gift options"
-              className="w-full rounded-2xl object-contain"
-              loading="lazy"
-            />
-            <p className="mt-3 text-center font-body text-sm italic text-wine-500/70">
-              "Pick one type of gift" — she picked all four. Obviously. 😂
+            <p className="mt-3 font-body text-base text-wine-600/90 max-w-lg mx-auto">
+              Every card below is one of your four gifts, resting on your blooming 3D tulip.
             </p>
+
+            {/* Interactive Memory Badge (Non-blocking so the 3D Tulip is in full glory) */}
+            <div className="mt-6 flex items-center justify-center">
+              <button
+                onClick={() => setShowQuizModal(true)}
+                className="group flex items-center gap-2 rounded-full bg-white/70 backdrop-blur-xl px-5 py-2.5 shadow-soft border border-white/80 hover:bg-white hover:shadow-card transition-all cursor-pointer text-xs font-semibold text-wine-700"
+              >
+                <span className="text-sm">📸</span>
+                <span>See the question: <i>"Pick one type of gift"</i> — she picked all four 😂</span>
+                <ExternalLink className="h-3.5 w-3.5 text-rose-500 transition-transform group-hover:scale-110" />
+              </button>
+            </div>
+
+            {/* Gift Roadmap Chips (Interactive jumping across gifts) */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => document.getElementById('gift-a')?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex items-center gap-1.5 rounded-full bg-white/70 backdrop-blur-md px-3.5 py-1.5 text-xs font-semibold text-wine-700 border border-white/80 hover:bg-white hover:text-rose-600 transition-all shadow-sm cursor-pointer"
+              >
+                <span>🌸</span>
+                <span>Gift A: Handmade</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.getElementById('gift-b')?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex items-center gap-1.5 rounded-full bg-white/70 backdrop-blur-md px-3.5 py-1.5 text-xs font-semibold text-wine-700 border border-white/80 hover:bg-white hover:text-rose-600 transition-all shadow-sm cursor-pointer"
+              >
+                <span>🤖</span>
+                <span>Gift B: Offline AI</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.getElementById('gift-c')?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex items-center gap-1.5 rounded-full bg-white/70 backdrop-blur-md px-3.5 py-1.5 text-xs font-semibold text-wine-700 border border-white/80 hover:bg-white hover:text-rose-600 transition-all shadow-sm cursor-pointer"
+              >
+                <span>♾️</span>
+                <span>Gift C: Forever</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.getElementById('gift-d')?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex items-center gap-1.5 rounded-full bg-white/70 backdrop-blur-md px-3.5 py-1.5 text-xs font-semibold text-wine-700 border border-white/80 hover:bg-white hover:text-rose-600 transition-all shadow-sm cursor-pointer"
+              >
+                <span>😘</span>
+                <span>Gift D: Kiss</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ─── GIFT A: Something handmade — This website ─── */}
-      <section className="px-6 pb-16 animate-fade-in">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-white p-8 shadow-soft sm:p-10 border-t-4 border-t-rose-400">
+      <section id="gift-a" className="px-6 pb-16 animate-fade-in scroll-mt-28">
+        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-white/45 backdrop-blur-xl p-8 shadow-card sm:p-10 border border-white/70 border-t-4 border-t-rose-400">
           <div className="flex items-start gap-4">
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
               <Gift className="h-6 w-6" />
             </span>
             <div>
-              <span className="chip bg-gold-100 text-gold-700 text-xs">Gift A</span>
+              <span className="chip bg-gold-100/90 text-gold-700 text-xs">Gift A</span>
               <h3 className="mt-2 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
                 Something handmade — This website
               </h3>
-              <p className="mt-3 font-body text-base leading-relaxed text-wine-500/90">
+              <p className="mt-3 font-body text-base leading-relaxed text-wine-600/90">
                 I created this website for you by my own hands, my time, and my thoughts — because I wanted to make something that exists only for you. Not a forwarded wish, not a bought gift. Something I built from scratch, just for you.
               </p>
             </div>
           </div>
 
           {/* Nested Playlist & Coupon Book directly inside Gift A */}
-          <div className="mt-10 grid gap-8 lg:grid-cols-2 border-t border-rose-100 pt-10">
+          <div className="mt-10 grid gap-8 lg:grid-cols-2 border-t border-rose-200/50 pt-10">
             {/* Playlist */}
             <div className="reveal">
               <div className="flex items-center gap-3">
@@ -386,7 +428,7 @@ export function GiftsPage() {
                 </div>
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-rose-100 bg-black/5">
+              <div className="mt-6 overflow-hidden rounded-2xl shadow-soft ring-1 ring-white/60 bg-black/5">
                 <iframe
                   className="aspect-[16/9] w-full"
                   src="https://www.youtube.com/embed/xitd9mEZIHk"
@@ -409,7 +451,7 @@ export function GiftsPage() {
               </a>
 
               {/* Interactive Jukebox Track List */}
-              <div className="mt-6 rounded-2xl bg-wine-800 p-6 text-cream-100 shadow-card border border-wine-700">
+              <div className="mt-6 rounded-2xl bg-wine-900/60 backdrop-blur-xl p-6 text-cream-100 shadow-card border border-wine-700/50">
                 <div className="flex items-center justify-between mb-4">
                   <h5 className="font-display text-base font-semibold text-white">The track list</h5>
                   <span className="text-[11px] font-semibold text-gold-300 uppercase tracking-wider">Tap to view memory note</span>
@@ -479,10 +521,10 @@ export function GiftsPage() {
                       key={c.title}
                       onClick={() => isClaimed && fire(10)}
                       className={[
-                        'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300',
+                        'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300 border border-white/60',
                         isClaimed
-                          ? 'bg-cream-100 ring-1 ring-emerald-300'
-                          : 'bg-cream-50 hover:bg-cream-100 shadow-soft',
+                          ? 'bg-cream-100/80 backdrop-blur-md ring-1 ring-emerald-300'
+                          : 'bg-white/60 backdrop-blur-md hover:bg-white/80 shadow-soft',
                       ].join(' ')}
                     >
                       <span className="absolute left-0 top-0 h-full w-1 bg-rose-400" />
@@ -510,7 +552,7 @@ export function GiftsPage() {
                 <button
                   onClick={downloadKeepsake}
                   disabled={generating}
-                  className="btn-ghost text-xs px-4 py-2 disabled:opacity-60"
+                  className="btn-ghost text-xs px-4 py-2 disabled:opacity-60 bg-white/40 backdrop-blur-md border-white/60"
                 >
                   <Download className="h-3.5 w-3.5" />
                   {generating ? 'Preparing keepsake…' : 'Download keepsake'}
@@ -518,7 +560,7 @@ export function GiftsPage() {
                 <button
                   onClick={rollLuckyNumber}
                   disabled={luckyStage === 'rolling'}
-                  className="btn-primary text-xs px-4 py-2 disabled:opacity-60"
+                  className="btn-primary text-xs px-4 py-2 disabled:opacity-60 shadow-soft"
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   {luckyStage === 'idle'
@@ -533,7 +575,7 @@ export function GiftsPage() {
               {luckyStage !== 'idle' && (
                 <div
                   key={luckyStage === 'rolling' ? 'rolling' : `revealed-${revealKey}`}
-                  className="lucky-panel-in mt-6 rounded-2xl bg-cream-50 p-6 text-center shadow-soft ring-1 ring-gold-100"
+                  className="lucky-panel-in mt-6 rounded-2xl bg-white/60 backdrop-blur-xl p-6 text-center shadow-soft ring-1 ring-gold-200/60 border border-white/60"
                 >
                   {luckyStage === 'rolling' ? (
                     <>
@@ -562,8 +604,8 @@ export function GiftsPage() {
       </section>
 
       {/* ─── GIFT B: A meaningful experience — Two Offline Tools ─── */}
-      <section className="px-6 pb-16">
-        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-soft sm:p-10">
+      <section id="gift-b" className="px-6 pb-16 scroll-mt-28">
+        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-white/45 backdrop-blur-xl p-8 shadow-card sm:p-10 border border-white/70">
           <div className="max-w-3xl">
             <span className="chip bg-rose-100 text-rose-600">
               <Bot className="h-3.5 w-3.5" />
@@ -572,14 +614,14 @@ export function GiftsPage() {
             <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
               A meaningful experience — Two Offline Tools
             </h3>
-            <p className="mt-4 font-body text-base leading-relaxed text-wine-500/90">
+            <p className="mt-4 font-body text-base leading-relaxed text-wine-600/90">
               I know how much you care about staying connected and safe, especially when the signal drops. So I built you two tools that work completely offline on your phone — a companion to talk to, and a way to always find your way back home.
             </p>
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {/* Tool 1: AI Companion */}
-            <div className="relative flex flex-col justify-between rounded-3xl bg-cream-50/50 p-6 shadow-soft ring-1 ring-rose-100 transition-all duration-300 hover:shadow-card hover:bg-cream-50">
+            <div className="relative flex flex-col justify-between rounded-3xl bg-white/50 backdrop-blur-md p-6 shadow-soft ring-1 ring-white/60 border border-white/40 transition-all duration-300 hover:shadow-card hover:bg-white/70">
               <div>
                 <div className="flex items-center gap-3">
                   <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500 text-white shadow-soft">
@@ -599,7 +641,7 @@ export function GiftsPage() {
                   href="https://aanya-ai.pages.dev/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary w-full text-center text-xs justify-center"
+                  className="btn-primary w-full text-center text-xs justify-center shadow-soft"
                 >
                   <Bot className="h-3.5 w-3.5" />
                   Meet your companion
@@ -609,7 +651,7 @@ export function GiftsPage() {
             </div>
 
             {/* Tool 2: Get Me Home — Always */}
-            <div className="relative flex flex-col justify-between rounded-3xl bg-cream-50/50 p-6 shadow-soft ring-1 ring-rose-100 transition-all duration-300 hover:shadow-card hover:bg-cream-50">
+            <div className="relative flex flex-col justify-between rounded-3xl bg-white/50 backdrop-blur-md p-6 shadow-soft ring-1 ring-white/60 border border-white/40 transition-all duration-300 hover:shadow-card hover:bg-white/70">
               <div>
                 <div className="flex items-center gap-3">
                   <span className="grid h-10 w-10 place-items-center rounded-xl bg-rose-500 text-white shadow-soft">
@@ -629,7 +671,7 @@ export function GiftsPage() {
                   href="https://aanya-ai.pages.dev/#get-me-home"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-ghost w-full text-center text-xs justify-center border-rose-200 text-rose-600 hover:bg-rose-50"
+                  className="btn-ghost w-full text-center text-xs justify-center border-rose-200 bg-white/40 text-rose-600 hover:bg-rose-50"
                 >
                   <Compass className="h-3.5 w-3.5" />
                   Open navigation tool
@@ -642,19 +684,19 @@ export function GiftsPage() {
       </section>
 
       {/* ─── GIFT C: Something you've wanted forever — Living Time Capsule ─── */}
-      <section className="px-6 pb-16">
-        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-wine-700 via-rose-600 to-gold-600 p-10 text-center text-white shadow-card sm:p-14">
-          <Infinity className="mx-auto h-10 w-10 animate-heart-beat text-gold-200" />
-          <span className="chip bg-white/10 text-cream-100 text-xs">Gift C</span>
-          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl">
+      <section id="gift-c" className="px-6 pb-16 scroll-mt-28">
+        <div className="reveal mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] bg-white/45 backdrop-blur-xl p-10 text-center text-wine-900 shadow-card sm:p-14 border border-white/70 border-t-4 border-t-gold-400">
+          <Infinity className="mx-auto h-10 w-10 animate-heart-beat text-gold-600" />
+          <span className="chip bg-gold-100 text-gold-700 text-xs mt-2">Gift C</span>
+          <h2 className="mt-4 font-display text-3xl font-bold sm:text-4xl text-wine-800">
             Something you've wanted forever — This website isn't finished.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-cream-100/90">
+          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-wine-700/90 leading-relaxed">
             This is something that starts with your birthday, but it doesn't end here.
             I'm going to keep adding to this — new photos, new memories, new notes, new
             milestones — for as long as we're us. Which is forever.
           </p>
-          <p className="mx-auto mt-5 max-w-xl font-body text-base text-cream-100/80">
+          <p className="mx-auto mt-5 max-w-xl font-body text-base text-wine-600/85">
             One day, our kids can open this website and see how special their mom was to
             their father and how our story started.
           </p>
@@ -662,22 +704,22 @@ export function GiftsPage() {
       </section>
 
       {/* ─── GIFT D: Kiss ─── */}
-      <section className="px-6 pb-16">
+      <section id="gift-d" className="px-6 pb-16 scroll-mt-28">
         <div
           onClick={() => {
             setKisses((k) => k + 1);
             fire(35);
           }}
-          className="reveal mx-auto max-w-xl overflow-hidden rounded-3xl bg-white p-8 text-center shadow-soft border border-rose-100 hover:shadow-card hover:scale-102 transition-all duration-300 cursor-pointer group"
+          className="reveal mx-auto max-w-xl overflow-hidden rounded-3xl bg-white/50 backdrop-blur-xl p-8 text-center shadow-card border border-white/70 hover:shadow-card hover:bg-white/70 hover:scale-102 transition-all duration-300 cursor-pointer group"
         >
           <span className="text-5xl block animate-heart-beat">😘</span>
           <h3 className="mt-4 font-display text-2xl font-semibold text-wine-700">
             Gift D — Kiss
           </h3>
-          <p className="mt-3 font-body text-base text-wine-500/90">
+          <p className="mt-3 font-body text-base text-wine-600/90">
             The kiss gift will soon come to you. 😘
           </p>
-          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-4 py-1.5 text-xs font-bold text-rose-600 border border-rose-100">
+          <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-rose-50/90 px-4 py-1.5 text-xs font-bold text-rose-600 border border-rose-200/60 shadow-sm">
             <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" />
             <span>
               {kisses === 0 ? 'Tap to send a kiss' : `${kisses} ${kisses === 1 ? 'kiss' : 'kisses'} sent! ❤️`}
@@ -688,15 +730,15 @@ export function GiftsPage() {
 
       {/* Final celebration banner */}
       <section className="px-6 pb-24">
-        <div className="reveal mx-auto max-w-3xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-wine-700 via-rose-600 to-gold-600 p-10 text-center text-white shadow-card sm:p-14 border border-rose-400/30">
-          <Sparkles className="mx-auto h-10 w-10 animate-heart-beat text-gold-200" />
-          <h2 className="mt-5 font-display text-4xl font-bold sm:text-5xl">
+        <div className="reveal mx-auto max-w-3xl overflow-hidden rounded-[2.5rem] bg-white/50 backdrop-blur-xl p-10 text-center text-wine-900 shadow-card sm:p-14 border border-white/70 border-t-4 border-t-rose-400">
+          <Sparkles className="mx-auto h-10 w-10 animate-heart-beat text-rose-500" />
+          <h2 className="mt-5 font-display text-4xl font-bold sm:text-5xl text-gradient-rose">
             Happy Birthday, {person.name}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-cream-100/90 leading-relaxed">
+          <p className="mx-auto mt-4 max-w-xl font-body text-lg text-wine-700/90 leading-relaxed">
             That's the whole site — every page, every word, made for you. You know me a little too much, and I wouldn't have it any other way. Now let's go have the real day. I Miss You
           </p>
-          <p className="mx-auto mt-5 max-w-xl rounded-2xl bg-white/10 px-6 py-4 font-body text-base italic text-cream-100/90 ring-1 ring-white/20">
+          <p className="mx-auto mt-5 max-w-xl rounded-2xl bg-rose-50/80 px-6 py-4 font-body text-base italic text-wine-800 ring-1 ring-rose-200/70 shadow-sm">
             "Aree Baba ye toh bas first step hai Next toh aapke liye Dress Select Karna hai, Jo bhi pasand hai yaad se bhej dena — I want to see you in it, something which i bought for my ladyy"
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -704,7 +746,7 @@ export function GiftsPage() {
               href="https://www.amazon.in/s?k=clothes+for+girlfriend+birthday+gift"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white/15 px-7 py-3 font-body font-medium text-white ring-1 ring-white/30 transition-all duration-300 hover:bg-white/25 hover:ring-white/50"
+              className="btn-primary text-sm px-7 py-3 shadow-soft"
             >
               <ExternalLink className="h-4 w-4" />
               Browse dress ideas on Amazon
@@ -712,13 +754,53 @@ export function GiftsPage() {
           </div>
           <button
             onClick={() => fire(260)}
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 font-body font-bold text-rose-600 shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-glow cursor-pointer"
+            className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white/90 px-8 py-3 font-body font-bold text-rose-600 shadow-soft ring-1 ring-rose-200 transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-glow cursor-pointer"
           >
             <Sparkles className="h-4 w-4" />
             One more round of confetti
           </button>
         </div>
       </section>
+
+      {/* ─── FLAMINGO QUESTION SCREENSHOT MODAL ─── */}
+      {showQuizModal && (
+        <div
+          onClick={() => setShowQuizModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in cursor-pointer"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-xl w-full rounded-3xl bg-wine-950/90 p-4 sm:p-6 shadow-2xl border border-white/20 text-center animate-scale-in"
+          >
+            <button
+              onClick={() => setShowQuizModal(false)}
+              className="absolute top-4 right-4 rounded-full bg-white/20 hover:bg-white/30 p-2 text-white transition-all cursor-pointer"
+              title="Close modal"
+            >
+              ✕
+            </button>
+            <h4 className="font-display text-xl font-bold text-white mb-1">
+              "Pick one type of gift"
+            </h4>
+            <p className="font-body text-xs text-cream-200/80 mb-4">
+              She picked all four (A, B, C, and D) — so I made all four for her. 😂
+            </p>
+            <div className="overflow-hidden rounded-2xl border border-white/10 shadow-inner">
+              <img
+                src="/image.png"
+                alt="Screenshot showing Aanya chose all four gift options"
+                className="w-full object-contain max-h-[70vh] rounded-xl"
+              />
+            </div>
+            <button
+              onClick={() => setShowQuizModal(false)}
+              className="mt-4 btn-primary text-xs px-6 py-2"
+            >
+              Close Memory
+            </button>
+          </div>
+        </div>
+      )}
     </PageShell>
   );
 }
