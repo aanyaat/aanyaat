@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { ArrowRight, Gift, HelpCircle, MapPin, Sparkles, Music2, Heart } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, Gift, HelpCircle, MapPin, Sparkles, Music2, Heart, BookOpen } from 'lucide-react';
 import { nav, person, wishes, memories } from '@/content';
 import { useCountdown } from '@/lib/useCountdown';
 import { useConfetti } from '@/lib/useConfetti';
@@ -8,12 +8,15 @@ import { useReveal } from '@/lib/useReveal';
 import { CountdownDisplay } from '@/components/CountdownDisplay';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { ThreeDPhotoExperience } from '@/components/ThreeDPhotoExperience';
+import { PWAInstallPrompt } from '@/components/PWAInstallPrompt';
+import { StorybookModal } from '@/components/StorybookModal';
 
 export function HomePage() {
   const cd = useCountdown(person.birthday);
   const { canvasRef, fire } = useConfetti(false);
   const { navigate } = useRouter();
   const previewRef = useReveal<HTMLElement>();
+  const [isStorybookOpen, setIsStorybookOpen] = useState(false);
 
   // When the birthday arrives, celebrate automatically.
   useEffect(() => {
@@ -39,6 +42,15 @@ export function HomePage() {
   return (
     <>
       <ConfettiOverlay canvasRef={canvasRef} />
+
+      {/* ─── PWA INSTALLATION PROMPT ─── */}
+      <PWAInstallPrompt />
+
+      {/* ─── STORYBOOK MODAL KEEPSAKE ─── */}
+      <StorybookModal
+        isOpen={isStorybookOpen}
+        onClose={() => setIsStorybookOpen(false)}
+      />
 
       {/* ─── 3D PHOTO EXPERIENCE BACKGROUND LAYER ─── */}
       <ThreeDPhotoExperience />
@@ -88,14 +100,24 @@ export function HomePage() {
                 fire(120);
                 navigate('/about');
               }}
-              className="btn-primary shadow-soft"
+              className="btn-primary shadow-soft cursor-pointer"
             >
               Start the tour
               <ArrowRight className="h-4 w-4" />
             </button>
             <button
+              onClick={() => {
+                setIsStorybookOpen(true);
+                fire(60);
+              }}
+              className="btn-ghost bg-white/70 text-wine-800 border-white/80 hover:bg-white backdrop-blur-md shadow-soft cursor-pointer flex items-center gap-1.5"
+            >
+              <BookOpen className="h-4 w-4 text-rose-500" />
+              Our Storybook Keepsake
+            </button>
+            <button
               onClick={() => fire(80)}
-              className="btn-ghost bg-white/50 text-wine-800 border-white/60 hover:bg-white/80 backdrop-blur-md shadow-soft"
+              className="btn-ghost bg-white/50 text-wine-800 border-white/60 hover:bg-white/80 backdrop-blur-md shadow-soft cursor-pointer"
             >
               <Sparkles className="h-4 w-4" />
               Throw confetti

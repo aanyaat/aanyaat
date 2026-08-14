@@ -14,6 +14,7 @@ export function ScratchOverlay({ onReveal }: { onReveal: () => void }) {
   const onRevealRef = useRef(onReveal);
   onRevealRef.current = onReveal;
   const [fading, setFading] = useState(false);
+  const scratchedOnceRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,12 +22,23 @@ export function ScratchOverlay({ onReveal }: { onReveal: () => void }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.max(1, Math.round(rect.width * dpr));
-    canvas.height = Math.max(1, Math.round(rect.height * dpr));
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawFoil(ctx, rect.width, rect.height);
+    const initCanvas = () => {
+      if (scratchedOnceRef.current) return;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawFoil(ctx, rect.width, rect.height);
+    };
+
+    initCanvas();
+
+    const resizeObserver = new ResizeObserver(() => {
+      initCanvas();
+    });
+    resizeObserver.observe(canvas);
 
     const pos = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect();
@@ -34,6 +46,7 @@ export function ScratchOverlay({ onReveal }: { onReveal: () => void }) {
     };
 
     const scratchAt = (x: number, y: number) => {
+      scratchedOnceRef.current = true;
       ctx.globalCompositeOperation = 'destination-out';
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -120,7 +133,7 @@ export function ScratchOverlay({ onReveal }: { onReveal: () => void }) {
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute inset-0 z-10 h-full w-full rounded-3xl ${
+      className={`absolute inset-0 z-10 h-full w-full rounded-2xl overflow-hidden ${
         fading ? 'opacity-0 transition-opacity duration-300' : ''
       }`}
       style={{ touchAction: 'none' }}

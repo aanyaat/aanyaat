@@ -14,6 +14,8 @@ import {
   Infinity,
   SmilePlus,
   Compass,
+  BookOpen,
+  X,
 } from 'lucide-react';
 import { coupons, playlist, person, memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
@@ -22,6 +24,7 @@ import { useConfetti } from '@/lib/useConfetti';
 import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { ScratchOverlay } from '@/components/ScratchCard';
 import { ThreeDTulipExperience } from '@/components/ThreeDTulipExperience';
+import { StorybookModal } from '@/components/StorybookModal';
 
 type LuckyStage = 'idle' | 'rolling' | 'revealed';
 
@@ -42,11 +45,10 @@ const fourGifts = [
 export function GiftsPage() {
   const { canvasRef, fire } = useConfetti(true);
   const [claimed, setClaimed] = useState<number[]>([]);
-  const [generating, setGenerating] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(0);
   const [kisses, setKisses] = useState(0);
   const [showQuizModal, setShowQuizModal] = useState(false);
-  const keepsakeCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [isStorybookOpen, setIsStorybookOpen] = useState(false);
 
   // Lucky-number-into-tulips state
   const [luckyStage, setLuckyStage] = useState<LuckyStage>('idle');
@@ -99,167 +101,11 @@ export function GiftsPage() {
     tick();
   };
 
-  // Draws a certificate-style keepsake onto an offscreen canvas and
-  // downloads it as a PNG. Replaces the old window.print() flow so the
-  // whole experience stays inside the site instead of a browser dialog.
-  const downloadKeepsake = () => {
-    setGenerating(true);
-
-    const canvas = keepsakeCanvasRef.current;
-    if (!canvas) {
-      setGenerating(false);
-      return;
-    }
-
-    const width = 1200;
-    const height = 1500;
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      setGenerating(false);
-      return;
-    }
-
-    // Background gradient — wine to rose to gold, matching the site
-    const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, '#4a1d2e');
-    bg.addColorStop(0.55, '#b3324a');
-    bg.addColorStop(1, '#c78a2e');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, width, height);
-
-    // Inner cream card
-    const margin = 56;
-    const cardX = margin;
-    const cardY = margin;
-    const cardW = width - margin * 2;
-    const cardH = height - margin * 2;
-    const radius = 36;
-    ctx.fillStyle = '#fdf8f0';
-    roundedRect(ctx, cardX, cardY, cardW, cardH, radius);
-    ctx.fill();
-
-    // Double border, like a certificate
-    ctx.strokeStyle = '#c78a2e';
-    ctx.lineWidth = 3;
-    roundedRect(ctx, cardX + 24, cardY + 24, cardW - 48, cardH - 48, radius - 12);
-    ctx.stroke();
-
-    let y = cardY + 110;
-    const centerX = width / 2;
-
-    // Eyebrow
-    ctx.fillStyle = '#b3324a';
-    ctx.font = '600 26px Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('K E E P S A K E   C E R T I F I C A T E', centerX, y);
-
-    y += 70;
-    ctx.fillStyle = '#4a1d2e';
-    ctx.font = '700 56px Georgia, serif';
-    ctx.fillText('This certifies that', centerX, y);
-
-    y += 80;
-    ctx.fillStyle = '#b3324a';
-    ctx.font = 'italic 700 68px Georgia, serif';
-    ctx.fillText(person.name, centerX, y);
-
-    y += 60;
-    ctx.fillStyle = '#4a1d2e';
-    ctx.font = '400 30px Georgia, serif';
-    ctx.fillText('holds the following coupons, valid forever:', centerX, y);
-
-    y += 60;
-    ctx.strokeStyle = '#e7c98f';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(cardX + 120, y);
-    ctx.lineTo(cardX + cardW - 120, y);
-    ctx.stroke();
-
-    y += 56;
-    ctx.textAlign = 'left';
-    const listX = cardX + 120;
-    coupons.forEach((c, i) => {
-      const isClaimed = claimed.includes(i);
-      ctx.fillStyle = isClaimed ? '#2f8f5b' : '#7a2038';
-      ctx.font = '700 30px Georgia, serif';
-      ctx.fillText(isClaimed ? '✓' : '❤', listX, y);
-
-      ctx.fillStyle = '#4a1d2e';
-      ctx.font = '700 30px Georgia, serif';
-      ctx.fillText(c.title, listX + 44, y);
-
-      ctx.fillStyle = '#8a6a56';
-      ctx.font = 'italic 400 22px Georgia, serif';
-      ctx.fillText(isClaimed ? 'claimed' : 'not yet claimed', width - margin - 190, y);
-
-      y += 52;
-    });
-
-    y += 50;
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#4a1d2e';
-    ctx.font = 'italic 400 26px Georgia, serif';
-    wrapText(
-      ctx,
-      'No expiry. Redeemable anytime, anywhere, no questions asked.',
-      centerX,
-      y,
-      cardW - 220,
-      34
-    );
-
-    // Footer: date + signature
-    const footerY = cardY + cardH - 130;
-    ctx.strokeStyle = '#e7c98f';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(cardX + 120, footerY - 40);
-    ctx.lineTo(cardX + cardW - 120, footerY - 40);
-    ctx.stroke();
-
-    const today = new Date();
-    const dateStr = today.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#8a6a56';
-    ctx.font = '400 22px Georgia, serif';
-    ctx.fillText(`Issued ${dateStr}`, cardX + 120, footerY);
-
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#b3324a';
-    ctx.font = 'italic 700 30px Georgia, serif';
-    ctx.fillText(`— ${person.fromYou}`, cardX + cardW - 120, footerY);
-
-    // Trigger the download
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        setGenerating(false);
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${person.name.toLowerCase()}-birthday-keepsake.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-      setGenerating(false);
-    }, 'image/png');
-  };
-
   return (
     <PageShell>
       {/* 3D Realtime Scroll-Driven Tulip & Petal Odyssey */}
       <ThreeDTulipExperience />
       <ConfettiOverlay canvasRef={canvasRef} />
-      {/* Offscreen canvas used only to render the keepsake PNG */}
-      <canvas ref={keepsakeCanvasRef} className="hidden" />
 
       {/* Keyframes for the lucky-number tulip reveal */}
       <style>{`
@@ -393,25 +239,25 @@ export function GiftsPage() {
       </section>
 
       {/* ─── GIFT A: Something handmade — This website ─── */}
-      <section id="gift-a" className="px-6 pb-16 animate-fade-in scroll-mt-28">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-white/45 backdrop-blur-xl p-8 shadow-card sm:p-10 border border-white/70 border-t-4 border-t-rose-400">
-          <div className="flex items-start gap-4">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
-              <Gift className="h-6 w-6" />
+      <section id="gift-a" className="px-3 sm:px-6 pb-16 animate-fade-in scroll-mt-28">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] bg-white/50 backdrop-blur-xl p-4 sm:p-8 md:p-10 shadow-card border border-white/70 border-t-4 border-t-rose-400">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <span className="grid h-10 w-10 sm:h-12 sm:w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
+              <Gift className="h-5 w-5 sm:h-6 sm:w-6" />
             </span>
             <div>
               <span className="chip bg-gold-100/90 text-gold-700 text-xs">Gift A</span>
-              <h3 className="mt-2 font-display text-2xl font-semibold text-wine-700 sm:text-3xl">
+              <h3 className="mt-2 font-display text-xl sm:text-2xl md:text-3xl font-semibold text-wine-700">
                 Something handmade — This website
               </h3>
-              <p className="mt-3 font-body text-base leading-relaxed text-wine-600/90">
+              <p className="mt-2.5 font-body text-sm sm:text-base leading-relaxed text-wine-600/90">
                 I created this website for you by my own hands, my time, and my thoughts — because I wanted to make something that exists only for you. Not a forwarded wish, not a bought gift. Something I built from scratch, just for you.
               </p>
             </div>
           </div>
 
           {/* Nested Playlist & Coupon Book directly inside Gift A */}
-          <div className="mt-10 grid gap-8 lg:grid-cols-2 border-t border-rose-200/50 pt-10">
+          <div className="mt-10 grid gap-8 lg:grid-cols-2 items-start border-t border-rose-200/50 pt-10">
             {/* Playlist */}
             <div className="reveal">
               <div className="flex items-center gap-3">
@@ -513,7 +359,7 @@ export function GiftsPage() {
               </div>
 
               {/* Scratch coupons */}
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="mt-6 grid gap-3 grid-cols-1 sm:grid-cols-2">
                 {coupons.map((c, i) => {
                   const isClaimed = claimed.includes(i);
                   return (
@@ -521,7 +367,7 @@ export function GiftsPage() {
                       key={c.title}
                       onClick={() => isClaimed && fire(10)}
                       className={[
-                        'group relative flex h-full w-full items-start gap-3 overflow-hidden rounded-2xl p-4 text-left transition-all duration-300 border border-white/60',
+                        'group relative flex min-h-[84px] w-full items-start gap-3 overflow-hidden rounded-2xl p-3.5 sm:p-4 text-left transition-all duration-300 border border-white/60 box-border',
                         isClaimed
                           ? 'bg-cream-100/80 backdrop-blur-md ring-1 ring-emerald-300'
                           : 'bg-white/60 backdrop-blur-md hover:bg-white/80 shadow-soft',
@@ -531,7 +377,7 @@ export function GiftsPage() {
                       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600 shadow-soft">
                         <c.icon className="h-4 w-4" />
                       </span>
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 pr-1">
                         <h5 className="font-display text-sm font-semibold text-wine-700 truncate">{c.title}</h5>
                         <p className="mt-0.5 font-body text-xs text-wine-500/85 leading-relaxed">{c.body}</p>
                       </div>
@@ -548,56 +394,38 @@ export function GiftsPage() {
               </div>
 
               {/* Keepsake & Lucky number actions */}
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              <div className="mt-6 flex flex-wrap items-center gap-2.5">
                 <button
-                  onClick={downloadKeepsake}
-                  disabled={generating}
-                  className="btn-ghost text-xs px-4 py-2 disabled:opacity-60 bg-white/40 backdrop-blur-md border-white/60"
+                  onClick={() => setIsStorybookOpen(true)}
+                  className="btn-primary text-xs px-4 py-2 bg-gradient-to-r from-rose-500 to-rose-600 shadow-soft flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Download className="h-3.5 w-3.5" />
-                  {generating ? 'Preparing keepsake…' : 'Download keepsake'}
+                  <BookOpen className="h-3.5 w-3.5" />
+                  Our Storybook Keepsake
                 </button>
                 <button
                   onClick={rollLuckyNumber}
                   disabled={luckyStage === 'rolling'}
-                  className="btn-primary text-xs px-4 py-2 disabled:opacity-60 shadow-soft"
+                  className="btn-ghost text-xs px-4 py-2 disabled:opacity-60 bg-white/60 backdrop-blur-md border-white/80 shadow-soft cursor-pointer flex items-center gap-1.5"
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {luckyStage === 'idle'
-                    ? "Lucky number?"
-                    : luckyStage === 'rolling'
-                      ? 'Rolling…'
-                      : 'Roll again'}
+                  <Sparkles className="h-3.5 w-3.5 text-gold-600" />
+                  Lucky number?
                 </button>
               </div>
 
-              {/* Lucky number panel */}
-              {luckyStage !== 'idle' && (
-                <div
-                  key={luckyStage === 'rolling' ? 'rolling' : `revealed-${revealKey}`}
-                  className="lucky-panel-in mt-6 rounded-2xl bg-white/60 backdrop-blur-xl p-6 text-center shadow-soft ring-1 ring-gold-200/60 border border-white/60"
-                >
-                  {luckyStage === 'rolling' ? (
-                    <>
-                      <p className="font-body text-xs text-wine-500/70">Finding your lucky number…</p>
-                      <p className="mt-1 font-display text-4xl font-bold tabular-nums text-rose-600">
-                        {rollingDisplay}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="font-body text-xs text-wine-500/70">Your lucky number is</p>
-                      <p className="mt-0.5 font-display text-4xl font-bold text-gradient-gold">
-                        {luckyNumber}
-                      </p>
-                      <p className="mt-1.5 font-body text-xs italic text-wine-500/70">
-                        Now watch — every little piece of you, blooming into one beautiful flower.
-                      </p>
-                      <PhotoTulipMorph key={revealKey} startDelay={0} />
-                    </>
-                  )}
+              {/* Sweet Note & Forever Rules Card to balance column height */}
+              <div className="mt-6 rounded-2xl bg-rose-50/70 backdrop-blur-md p-4 border border-rose-100/80 shadow-soft">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="grid h-6 w-6 place-items-center rounded-full bg-rose-200 text-rose-700 text-xs">
+                    ✨
+                  </span>
+                  <h6 className="font-display text-xs font-bold uppercase tracking-wider text-wine-800">
+                    Official Coupon Rules
+                  </h6>
                 </div>
-              )}
+                <p className="font-body text-xs text-wine-600/90 leading-relaxed">
+                  Every coupon you scratch is permanently recorded. Valid anytime, anywhere across Bengaluru, Delhi, or wherever we are — no expiration date, no arguments, just love.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -783,13 +611,13 @@ export function GiftsPage() {
               "Pick one type of gift"
             </h4>
             <p className="font-body text-xs text-cream-200/80 mb-4">
-              She picked all four (A, B, C, and D) — so I made all four for her. 😂
+              And she picked all four 😂 That's why you get all four.
             </p>
-            <div className="overflow-hidden rounded-2xl border border-white/10 shadow-inner">
+            <div className="overflow-hidden rounded-2xl border border-white/20 shadow-lg">
               <img
                 src="/image.png"
-                alt="Screenshot showing Aanya chose all four gift options"
-                className="w-full object-contain max-h-[70vh] rounded-xl"
+                alt="Pick one type of gift question with all 4 selected"
+                className="w-full h-auto max-h-[70vh] object-contain mx-auto"
               />
             </div>
             <button
@@ -801,6 +629,74 @@ export function GiftsPage() {
           </div>
         </div>
       )}
+
+      {/* ─── LUCKY TULIP FLOWER MODAL ─── */}
+      {luckyStage !== 'idle' && (
+        <div
+          onClick={() => setLuckyStage('idle')}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in cursor-pointer"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-sm w-full rounded-3xl bg-white/95 p-6 shadow-2xl border border-white text-center animate-scale-in text-wine-900"
+          >
+            <button
+              onClick={() => setLuckyStage('idle')}
+              className="absolute top-3.5 right-3.5 rounded-full bg-rose-100 hover:bg-rose-200 p-1.5 text-wine-800 transition-all cursor-pointer"
+              title="Close flower"
+            >
+              <X className="h-4 w-4" />
+            </button>
+
+            {luckyStage === 'rolling' ? (
+              <div className="py-8">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-gold-100 text-gold-700 mx-auto shadow-sm animate-bounce mb-3">
+                  <Sparkles className="h-6 w-6" />
+                </span>
+                <p className="font-body text-xs text-wine-500 font-semibold uppercase tracking-wider">Finding your lucky number…</p>
+                <p className="mt-2 font-display text-5xl font-extrabold tabular-nums text-rose-600">
+                  {rollingDisplay}
+                </p>
+              </div>
+            ) : (
+              <div className="pt-2 pb-1">
+                <span className="chip bg-gold-100 text-gold-800 text-xs mx-auto">
+                  ✨ Aanya's Blooming Tulip
+                </span>
+                <p className="mt-2 font-body text-xs text-wine-500/80 font-medium">Your lucky number is</p>
+                <p className="font-display text-4xl font-extrabold text-gradient-gold">
+                  {luckyNumber}
+                </p>
+                <p className="mt-1 font-body text-xs text-wine-600/90 italic">
+                  Every piece of you, blooming into one beautiful flower.
+                </p>
+                <PhotoTulipMorph key={revealKey} startDelay={0} />
+                <div className="mt-4 flex items-center justify-center gap-2">
+                  <button
+                    onClick={rollLuckyNumber}
+                    className="btn-primary text-xs px-4 py-2 shadow-soft cursor-pointer flex items-center gap-1.5"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Roll again
+                  </button>
+                  <button
+                    onClick={() => setLuckyStage('idle')}
+                    className="btn-ghost text-xs px-4 py-2 bg-rose-50 hover:bg-rose-100 text-wine-800 border-rose-200 cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ─── STORYBOOK MODAL KEEPSAKE ─── */}
+      <StorybookModal
+        isOpen={isStorybookOpen}
+        onClose={() => setIsStorybookOpen(false)}
+      />
     </PageShell>
   );
 }
@@ -810,14 +706,14 @@ export function GiftsPage() {
 const MORPH_PHOTO_SRCS = memories.slice(0, 5).map((m) => m.src);
 
 const MORPH_SCATTER = [
-  { x: -128, y: -64 },
-  { x: 124, y: -88 },
-  { x: -104, y: 84 },
-  { x: 112, y: 72 },
-  { x: 0, y: -116 },
+  { x: -65, y: -35 },
+  { x: 65, y: -40 },
+  { x: -50, y: 40 },
+  { x: 55, y: 35 },
+  { x: 0, y: -50 },
 ];
 
-const MORPH_SPARK_COUNT = 14;
+const MORPH_SPARK_COUNT = 12;
 
 type MorphStyle = CSSProperties & {
   '--sx'?: string;
@@ -832,25 +728,25 @@ function PhotoTulipMorph({ startDelay = 0 }: { startDelay?: number }) {
     () =>
       Array.from({ length: MORPH_SPARK_COUNT }, () => {
         const angle = Math.random() * Math.PI * 2;
-        const dist = 70 + Math.random() * 70;
+        const dist = 50 + Math.random() * 50;
         return {
           ex: Math.cos(angle) * dist,
           ey: Math.sin(angle) * dist,
-          size: 4 + Math.random() * 5,
+          size: 3 + Math.random() * 4,
           color: ['#f9e28a', '#ffabb9', '#f36c96', '#e8b62a'][
             Math.floor(Math.random() * 4)
           ],
-          delay: Math.random() * 220,
+          delay: Math.random() * 200,
         };
       }),
     []
   );
 
   return (
-    <div className="relative mx-auto mt-6 h-72 w-full max-w-sm sm:h-80">
+    <div className="relative mx-auto mt-4 h-60 w-full max-w-[260px] overflow-hidden">
       {/* glow burst at the merge point */}
       <span
-        className="morph-glow absolute left-1/2 top-1/2 h-44 w-44 rounded-full"
+        className="morph-glow absolute left-1/2 top-1/2 h-36 w-36 rounded-full"
         style={{
           background:
             'radial-gradient(circle, rgba(249,226,138,0.9) 0%, rgba(255,171,185,0.5) 45%, transparent 70%)',
@@ -867,7 +763,7 @@ function PhotoTulipMorph({ startDelay = 0 }: { startDelay?: number }) {
             src={src}
             alt=""
             aria-hidden="true"
-            className="morph-photo absolute left-1/2 top-1/2 h-20 w-20 rounded-2xl object-cover shadow-card ring-2 ring-white/80 sm:h-24 sm:w-24"
+            className="morph-photo absolute left-1/2 top-1/2 h-16 w-16 rounded-xl object-cover shadow-card ring-2 ring-white/80 sm:h-20 sm:w-20"
             style={
               {
                 animationDelay: `${startDelay + i * 90}ms`,
@@ -901,7 +797,7 @@ function PhotoTulipMorph({ startDelay = 0 }: { startDelay?: number }) {
       {/* the single beautiful tulip, blooming from all of her */}
       <svg
         viewBox="0 0 120 170"
-        className="morph-tulip absolute left-1/2 top-1/2 h-64 w-48 sm:h-72 sm:w-56"
+        className="morph-tulip absolute left-1/2 top-1/2 h-52 w-36 sm:h-56 sm:w-40"
         style={{ animationDelay: `${startDelay + 1500}ms` }}
         aria-label="A tulip blooming from her photos."
       >
