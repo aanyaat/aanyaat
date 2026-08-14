@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .font-handwriting {
+    font-family: 'Caveat', cursive, sans-serif;
+  }
+}
 
 @layer base {
   :root {
@@ -88,6 +96,23 @@
 
   .nav-link[data-active='true'] {
     @apply text-rose-600;
+  }
+
+  .card-premium {
+    @apply relative overflow-hidden rounded-3xl bg-white p-6 sm:p-8 shadow-soft border border-rose-100/50 transition-all duration-300;
+  }
+
+  .card-premium::before {
+    content: '';
+    @apply absolute inset-0 -translate-y-full bg-gradient-to-b from-rose-100/10 to-transparent transition-transform duration-500 ease-out pointer-events-none;
+  }
+
+  .card-premium:hover::before {
+    @apply translate-y-0;
+  }
+
+  .card-premium:hover {
+    @apply -translate-y-1 shadow-card border-rose-200/80;
   }
 }
 

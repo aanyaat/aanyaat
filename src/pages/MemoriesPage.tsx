@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, X, Calendar, Plus, Trash2, Link, PenLine } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Calendar,
+  Plus,
+  Trash2,
+  Link,
+  Camera,
+  BookOpen,
+  Milestone,
+} from 'lucide-react';
 import { memories } from '@/content';
 import { PageShell } from '@/components/PageShell';
 import { SectionTitle } from '@/components/SectionTitle';
@@ -263,38 +274,43 @@ export function MemoriesPage() {
       </section>
 
       <section className="px-6 pb-24">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3.5 sm:gap-5 lg:grid-cols-4">
-          {memories.map((m, i) => (
-            <button
-              key={m.src}
-              onClick={() => setActive(i)}
-              className={[
-                'reveal group relative overflow-hidden rounded-3xl bg-wine-700 shadow-soft transition-all duration-500 hover:shadow-card',
-                m.span ? 'col-span-2 lg:row-span-2' : '',
-              ].join(' ')}
-              style={{ transitionDelay: `${i * 50}ms` }}
-            >
-              <img
-                src={m.src}
-                alt={m.alt}
-                loading="lazy"
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          {memories.map((m, i) => {
+            const rotations = ['sm:-rotate-2', 'sm:rotate-1', 'sm:-rotate-1', 'sm:rotate-2', 'sm:-rotate-3', 'sm:rotate-3'];
+            const rot = rotations[i % rotations.length];
+            return (
+              <button
+                key={m.src}
+                onClick={() => setActive(i)}
                 className={[
-                  'w-full object-cover transition-transform duration-700 group-hover:scale-105',
-                  m.span ? 'aspect-[16/10] lg:aspect-square' : 'aspect-square',
+                  'reveal group relative bg-white p-3 pb-8 sm:p-4 sm:pb-11 shadow-soft ring-1 ring-wine-900/5 transition-all duration-500 hover:shadow-card hover:scale-102 sm:hover:rotate-0',
+                  rot,
+                  m.span ? 'col-span-2 lg:row-span-2' : '',
                 ].join(' ')}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-wine-900/85 via-wine-900/10 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-95" />
-              <div className="absolute inset-x-0 bottom-0 p-4 text-left">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-cream-100 backdrop-blur-sm">
-                  <Calendar className="h-3 w-3" />
-                  {m.date}
-                </span>
-                <p className="mt-2 font-display text-base font-medium text-white drop-shadow sm:text-lg">
-                  {m.caption}
-                </p>
-              </div>
-            </button>
-          ))}
+                style={{ transitionDelay: `${i * 50}ms` }}
+              >
+                <div className="overflow-hidden bg-rose-50 rounded-lg">
+                  <img
+                    src={m.src}
+                    alt={m.alt}
+                    loading="lazy"
+                    className={[
+                      'w-full object-cover transition-transform duration-700 group-hover:scale-105',
+                      m.span ? 'aspect-[16/10] lg:aspect-square' : 'aspect-square',
+                    ].join(' ')}
+                  />
+                </div>
+                <div className="mt-3 text-center sm:mt-4">
+                  <p className="font-handwriting text-xl sm:text-2xl font-bold text-wine-800 leading-tight">
+                    {m.caption}
+                  </p>
+                  <p className="font-handwriting text-sm sm:text-base text-rose-500 mt-0.5">
+                    {m.date}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         <div className="reveal mx-auto mt-14 max-w-xl text-center">
@@ -309,125 +325,260 @@ export function MemoriesPage() {
         </div>
       </section>
 
-      {/* Memory Archive — interactive with localStorage fallback */}
+      {/* Memory Archive — interactive dashboard layout */}
       <section className="px-6 pb-24">
-        <div className="mx-auto max-w-5xl">
-          <div className="reveal mx-auto mb-10 max-w-2xl text-center">
+        <div className="mx-auto max-w-6xl">
+          <div className="reveal mx-auto mb-14 max-w-2xl text-center">
             <span className="chip bg-gold-100 text-gold-700">Living archive</span>
             <h3 className="mt-4 font-display text-3xl font-semibold text-wine-700 sm:text-4xl">
-              Our <span className="text-gradient-rose">memory archive</span>
+              Our shared <span className="text-gradient-rose">memory board</span>
             </h3>
             <p className="mt-3 font-body text-wine-500/80">
-              This will keep growing. Every photo, every note, every milestone — added over time, never deleted.
+              This is our space. Post notes, share drives, and log milestones. Everything syncs instantly in real time.
             </p>
             {loading && (
-              <p className="mt-2 font-body text-xs text-rose-500 animate-pulse">Syncing with database...</p>
+              <p className="mt-2 font-body text-xs text-rose-500 animate-pulse">Syncing changes...</p>
             )}
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            {/* 📷 Digital Photo Album — add links */}
-            <div className="reveal group relative overflow-hidden rounded-3xl bg-white p-7 shadow-soft transition-all duration-500 hover:shadow-card">
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-rose-100/50 blur-2xl opacity-60" />
-              <button onClick={() => setExpandedCard(expandedCard === 'links' ? null : 'links')} className="relative w-full text-left">
-                <span className="text-3xl">📷</span>
-                <h4 className="mt-4 font-display text-lg font-semibold text-wine-700">Digital Photo Album</h4>
-                <p className="mt-2 font-body text-sm text-wine-500/80">
-                  {links.length === 0 ? 'Add album links — Google Drive, Google Photos, etc.' : `${links.length} link${links.length === 1 ? '' : 's'} saved`}
-                </p>
-              </button>
-              {expandedCard === 'links' && (
-                <div className="relative mt-4 space-y-3 border-t border-rose-100 pt-4">
-                  {links.map((l, i) => (
-                    <div key={l.id || i} className="flex items-center gap-2">
-                      <Link className="h-3.5 w-3.5 shrink-0 text-rose-400" />
-                      <a href={l.url} target="_blank" rel="noopener noreferrer" className="flex-1 truncate font-body text-sm text-rose-600 underline">{l.label || l.url}</a>
-                      <button onClick={() => deleteLink(l.id, i)} className="shrink-0 text-wine-400 hover:text-rose-600"><Trash2 className="h-3.5 w-3.5" /></button>
-                    </div>
-                  ))}
-                  <div className="flex flex-col gap-2 sm:flex-row">
-                    <input value={newLinkLabel} onChange={e => setNewLinkLabel(e.target.value)} placeholder="Label (e.g. Our Drive)" className="flex-1 rounded-xl border border-rose-200 bg-cream-100 px-3 py-2 font-body text-sm text-wine-700 placeholder:text-wine-400/50 focus:border-rose-400 focus:outline-none" />
-                    <input value={newLinkUrl} onChange={e => setNewLinkUrl(e.target.value)} placeholder="https://..." className="flex-1 rounded-xl border border-rose-200 bg-cream-100 px-3 py-2 font-body text-sm text-wine-700 placeholder:text-wine-400/50 focus:border-rose-400 focus:outline-none" />
-                    <button onClick={addLink} className="shrink-0 rounded-xl bg-rose-500 px-4 py-2 font-body text-sm font-medium text-white shadow-soft hover:bg-rose-600">
-                      <Plus className="h-4 w-4" />
-                    </button>
+          <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
+            {/* Column 1: 📝 Notes & Thoughts (span 2 on desktop) */}
+            <div className="reveal lg:col-span-2 flex flex-col justify-between card-premium border-t-4 border-t-amber-400/80">
+              <div>
+                <div className="flex items-center gap-3 pb-5 mb-6 border-b border-rose-100/50">
+                  <span className="p-3 rounded-2xl bg-amber-50 text-amber-500 shadow-sm shrink-0">
+                    <BookOpen className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-display text-xl font-bold text-wine-800 truncate">Our Shared Notes & Thoughts</h4>
+                    <p className="text-xs text-wine-500/60 truncate">Pin little letters, cute moments, and memories.</p>
                   </div>
+                  <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0">
+                    {notes.length} {notes.length === 1 ? 'note' : 'notes'}
+                  </span>
                 </div>
-              )}
+
+                {notes.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center rounded-2xl bg-cream-50/50 border border-dashed border-rose-200">
+                    <span className="text-3xl opacity-50">📝</span>
+                    <p className="mt-3 font-body text-sm font-medium text-wine-600">No notes pinned yet.</p>
+                    <p className="mt-1 font-body text-xs text-wine-400/80">Write your first note below to pin it to our memory board!</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-5 sm:grid-cols-2 max-h-[460px] overflow-y-auto pr-2 no-scrollbar">
+                    {notes.map((n, i) => {
+                      const stickyColors = [
+                        'bg-amber-50/70 border-amber-200/50',
+                        'bg-rose-50/70 border-rose-200/50',
+                        'bg-cream-50/70 border-cream-200/60',
+                      ];
+                      const stickyColor = stickyColors[i % stickyColors.length];
+                      const rot = i % 2 === 0 ? 'sm:-rotate-1' : 'sm:rotate-1';
+                      return (
+                        <div
+                          key={n.id || i}
+                          className={[
+                            'relative p-5 rounded-2xl border shadow-soft transition-all duration-300 hover:rotate-0 hover:scale-102 flex flex-col justify-between min-h-[130px]',
+                            stickyColor,
+                            rot,
+                          ].join(' ')}
+                        >
+                          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-10 h-4 bg-white/50 backdrop-blur-[1px] border border-white/20 rotate-2 shadow-sm" />
+                          <p className="font-handwriting text-xl text-wine-800 leading-relaxed whitespace-pre-wrap flex-1">
+                            {n.text}
+                          </p>
+                          <div className="flex justify-end mt-2 pt-2 border-t border-wine-500/10">
+                            <button
+                              onClick={() => deleteNote(n.id, i)}
+                              className="text-wine-400 hover:text-rose-600 transition-colors hover:scale-110"
+                              title="Delete note"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-8 border-t border-rose-100/50 pt-6">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-wine-600 mb-2">Pin a new note</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <textarea
+                    value={newNote}
+                    onChange={e => setNewNote(e.target.value)}
+                    placeholder="Write a sweet memory or note..."
+                    rows={2}
+                    className="flex-1 rounded-2xl border border-rose-200 bg-cream-50/40 px-4 py-3 font-body text-sm text-wine-800 placeholder:text-wine-400/40 focus:border-rose-400 focus:outline-none focus:ring-1 focus:ring-rose-400 resize-none transition-all"
+                  />
+                  <button
+                    onClick={addNote}
+                    className="btn-primary shrink-0 self-end sm:self-center px-6 py-3.5 h-[50px] text-xs uppercase tracking-wider gap-1.5"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Pin Note
+                  </button>
+                </div>
+              </div>
             </div>
 
-            {/* 📝 Our Shared Notes — write & save */}
-            <div className="reveal group relative overflow-hidden rounded-3xl bg-white p-7 shadow-soft transition-all duration-500 hover:shadow-card">
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-rose-100/50 blur-2xl opacity-60" />
-              <button onClick={() => setExpandedCard(expandedCard === 'notes' ? null : 'notes')} className="relative w-full text-left">
-                <span className="text-3xl">📝</span>
-                <h4 className="mt-4 font-display text-lg font-semibold text-wine-700">Our Shared Notes & Thoughts</h4>
-                <p className="mt-2 font-body text-sm text-wine-500/80">
-                  {notes.length === 0 ? 'Write little things we want to remember.' : `${notes.length} note${notes.length === 1 ? '' : 's'} saved`}
-                </p>
-              </button>
-              {expandedCard === 'notes' && (
-                <div className="relative mt-4 space-y-3 border-t border-rose-100 pt-4">
-                  {notes.map((n, i) => (
-                    <div key={n.id || i} className="flex items-start gap-2">
-                      <PenLine className="mt-0.5 h-3.5 w-3.5 shrink-0 text-rose-400" />
-                      <p className="flex-1 font-body text-sm text-wine-600 whitespace-pre-wrap">{n.text}</p>
-                      <button onClick={() => deleteNote(n.id, i)} className="shrink-0 text-wine-400 hover:text-rose-600"><Trash2 className="h-3.5 w-3.5" /></button>
+            {/* Column 2: 📷 Links & 📍 Moments (stacks on desktop) */}
+            <div className="lg:col-span-1 flex flex-col gap-8">
+              {/* 📷 Digital Photo Album */}
+              <div className="reveal flex flex-col justify-between card-premium border-t-4 border-t-rose-400/80 min-h-[320px]">
+                <div>
+                  <div className="flex items-center gap-3 pb-4 mb-4 border-b border-rose-100/50">
+                    <span className="p-2.5 rounded-2xl bg-rose-50 text-rose-500 shadow-sm shrink-0">
+                      <Camera className="h-5 w-5" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-display text-lg font-bold text-wine-800 truncate">Digital Photo Album</h4>
+                      <p className="text-xs text-wine-500/60 truncate font-body">Share Drive/Google Photos links.</p>
                     </div>
-                  ))}
+                    <span className="bg-rose-100 text-rose-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0">
+                      {links.length} {links.length === 1 ? 'link' : 'links'}
+                    </span>
+                  </div>
+
+                  {links.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 text-center rounded-xl bg-cream-50/50 border border-dashed border-rose-200 px-3">
+                      <p className="font-body text-xs font-medium text-wine-600">No album links saved yet.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2.5 max-h-[180px] overflow-y-auto pr-1 no-scrollbar">
+                      {links.map((l, i) => (
+                        <div key={l.id || i} className="flex items-center gap-2.5 bg-rose-50/50 p-2.5 rounded-xl border border-rose-100">
+                          <Link className="h-4 w-4 shrink-0 text-rose-400" />
+                          <a
+                            href={l.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 truncate font-body text-xs font-semibold text-rose-700 hover:text-rose-800 underline"
+                          >
+                            {l.label || l.url}
+                          </a>
+                          <button
+                            onClick={() => deleteLink(l.id, i)}
+                            className="shrink-0 text-wine-400 hover:text-rose-600 transition-colors hover:scale-110"
+                            title="Delete link"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 border-t border-rose-100/50 pt-4 space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-wine-600">Add album link</label>
+                  <input
+                    value={newLinkLabel}
+                    onChange={e => setNewLinkLabel(e.target.value)}
+                    placeholder="Label (e.g. Our Maldives Trip)"
+                    className="w-full rounded-xl border border-rose-100 bg-cream-50/40 px-3.5 py-2 font-body text-xs text-wine-800 placeholder:text-wine-400/40 focus:border-rose-400 focus:outline-none transition-all"
+                  />
                   <div className="flex gap-2">
-                    <textarea value={newNote} onChange={e => setNewNote(e.target.value)} placeholder="Write a note..." rows={2} className="flex-1 rounded-xl border border-rose-200 bg-cream-100 px-3 py-2 font-body text-sm text-wine-700 placeholder:text-wine-400/50 focus:border-rose-400 focus:outline-none resize-none" />
-                    <button onClick={addNote} className="shrink-0 self-end rounded-xl bg-rose-500 px-4 py-2 font-body text-sm font-medium text-white shadow-soft hover:bg-rose-600">
+                    <input
+                      value={newLinkUrl}
+                      onChange={e => setNewLinkUrl(e.target.value)}
+                      placeholder="https://..."
+                      className="flex-1 rounded-xl border border-rose-100 bg-cream-50/40 px-3.5 py-2 font-body text-xs text-wine-800 placeholder:text-wine-400/40 focus:border-rose-400 focus:outline-none transition-all"
+                    />
+                    <button
+                      onClick={addLink}
+                      className="btn-primary shrink-0 px-3 py-2 text-xs"
+                      title="Save link"
+                    >
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* 📍 Milestone Moments — add title + date */}
-            <div className="reveal group relative overflow-hidden rounded-3xl bg-white p-7 shadow-soft transition-all duration-500 hover:shadow-card">
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-rose-100/50 blur-2xl opacity-60" />
-              <button onClick={() => setExpandedCard(expandedCard === 'moments' ? null : 'moments')} className="relative w-full text-left">
-                <span className="text-3xl">📍</span>
-                <h4 className="mt-4 font-display text-lg font-semibold text-wine-700">Milestone Moments</h4>
-                <p className="mt-2 font-body text-sm text-wine-500/80">
-                  {moments.length === 0 ? 'First call, first meet, first trip, first everything.' : `${moments.length} moment${moments.length === 1 ? '' : 's'} logged`}
-                </p>
-              </button>
-              {expandedCard === 'moments' && (
-                <div className="relative mt-4 space-y-3 border-t border-rose-100 pt-4">
-                  {moments.map((m, i) => (
-                    <div key={m.id || i} className="flex items-center gap-2">
-                      <Calendar className="h-3.5 w-3.5 shrink-0 text-rose-400" />
-                      <span className="font-body text-sm font-medium text-wine-700">{m.title}</span>
-                      <span className="font-body text-xs text-wine-400">{m.date}</span>
-                      <button onClick={() => deleteMoment(m.id, i)} className="ml-auto shrink-0 text-wine-400 hover:text-rose-600"><Trash2 className="h-3.5 w-3.5" /></button>
+              {/* 📍 Milestone Moments */}
+              <div className="reveal flex flex-col justify-between card-premium border-t-4 border-t-gold-400/80 min-h-[320px]">
+                <div>
+                  <div className="flex items-center gap-3 pb-4 mb-4 border-b border-rose-100/50">
+                    <span className="p-2.5 rounded-2xl bg-gold-50 text-gold-600 shadow-sm shrink-0">
+                      <Milestone className="h-5 w-5" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-display text-lg font-bold text-wine-800 truncate">Milestone Moments</h4>
+                      <p className="text-xs text-wine-500/60 truncate font-body">Our timeline milestones.</p>
                     </div>
-                  ))}
-                  <div className="flex flex-col gap-2 sm:flex-row">
-                    <input value={newMomentTitle} onChange={e => setNewMomentTitle(e.target.value)} placeholder="What happened?" className="flex-1 rounded-xl border border-rose-200 bg-cream-100 px-3 py-2 font-body text-sm text-wine-700 placeholder:text-wine-400/50 focus:border-rose-400 focus:outline-none" />
-                    <input type="date" value={newMomentDate} onChange={e => setNewMomentDate(e.target.value)} className="rounded-xl border border-rose-200 bg-cream-100 px-3 py-2 font-body text-sm text-wine-700 focus:border-rose-400 focus:outline-none" />
-                    <button onClick={addMoment} className="shrink-0 rounded-xl bg-rose-500 px-4 py-2 font-body text-sm font-medium text-white shadow-soft hover:bg-rose-600">
+                    <span className="bg-gold-100 text-gold-800 text-xs font-semibold px-2.5 py-0.5 rounded-full shrink-0">
+                      {moments.length} {moments.length === 1 ? 'moment' : 'moments'}
+                    </span>
+                  </div>
+
+                  {moments.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-8 text-center rounded-xl bg-cream-50/50 border border-dashed border-rose-200 px-3">
+                      <p className="font-body text-xs font-medium text-wine-600">No milestones logged yet.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1 no-scrollbar">
+                      {moments.map((m, i) => (
+                        <div
+                          key={m.id || i}
+                          className="relative flex items-center bg-white border border-rose-100 rounded-2xl overflow-hidden shadow-soft p-3 gap-3 hover:shadow-md transition-shadow"
+                        >
+                          <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-cream-100 border-r border-rose-100" />
+                          <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-cream-100 border-l border-rose-100" />
+                          <div className="pl-2 pr-1 flex items-center justify-between w-full gap-2">
+                            <div className="flex flex-col">
+                              <span className="font-handwriting text-xs font-bold text-rose-500">
+                                {m.date}
+                              </span>
+                              <span className="font-handwriting text-base text-wine-800 font-semibold leading-tight mt-0.5">
+                                {m.title}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => deleteMoment(m.id, i)}
+                              className="text-wine-400 hover:text-rose-600 transition-colors ml-auto hover:scale-110"
+                              title="Delete moment"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 border-t border-rose-100/50 pt-4 space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-wine-600">Log milestone</label>
+                  <input
+                    value={newMomentTitle}
+                    onChange={e => setNewMomentTitle(e.target.value)}
+                    placeholder="What happened?"
+                    className="w-full rounded-xl border border-rose-100 bg-cream-50/40 px-3.5 py-2 font-body text-xs text-wine-800 placeholder:text-wine-400/40 focus:border-rose-400 focus:outline-none transition-all"
+                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="date"
+                      value={newMomentDate}
+                      onChange={e => setNewMomentDate(e.target.value)}
+                      className="flex-1 rounded-xl border border-rose-100 bg-cream-50/40 px-3 py-2 font-body text-xs text-wine-800 focus:border-rose-400 focus:outline-none transition-all"
+                    />
+                    <button
+                      onClick={addMoment}
+                      className="btn-primary shrink-0 px-3 py-2 text-xs"
+                      title="Save moment"
+                    >
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* 🌟 Future Memories — static placeholder */}
-            <div className="reveal group relative overflow-hidden rounded-3xl bg-white p-7 shadow-soft transition-all duration-500 hover:shadow-card">
-              <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-rose-100/50 blur-2xl opacity-60" />
-              <span className="relative text-3xl">🌟</span>
-              <h4 className="relative mt-4 font-display text-lg font-semibold text-wine-700">Future Memories</h4>
-              <p className="relative mt-2 font-body text-sm leading-relaxed text-wine-500/80">
-                Waiting to be added. The best ones haven't happened yet.
-              </p>
+              </div>
             </div>
           </div>
 
-          <div className="reveal mt-10 rounded-3xl bg-gradient-to-br from-wine-700 to-rose-600 p-8 text-center text-white shadow-card">
+          <div className="reveal mt-12 rounded-3xl bg-gradient-to-br from-wine-700 to-rose-600 p-8 text-center text-white shadow-card">
             <p className="font-display text-xl text-white sm:text-2xl">
               One day, our kids can open this and see how it all started.
             </p>
