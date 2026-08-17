@@ -286,8 +286,8 @@ export function ConnectAppGiftSection() {
             })}
           </div>
 
-          {/* Active Feature Showcase & Phone Simulator with high-contrast text */}
-          <div className="mt-6 rounded-3xl bg-wine-950 p-6 sm:p-8 text-white shadow-2xl border border-rose-500/30 grid lg:grid-cols-12 gap-8 items-center">
+          {/* Active Feature Showcase & Phone Simulator with high-contrast luxury dark background */}
+          <div className="mt-6 rounded-3xl bg-[#1a0717] p-6 sm:p-8 text-white shadow-2xl border border-rose-500/40 grid lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Description & Interactive Action */}
             <div className="lg:col-span-7 flex flex-col justify-between gap-6">
               <div>
@@ -295,7 +295,7 @@ export function ConnectAppGiftSection() {
                   <span className="px-3 py-1 rounded-full bg-rose-500/30 border border-rose-400/50 text-[11px] font-bold text-rose-300">
                     {selectedFeature.badge}
                   </span>
-                  <span className="text-xs text-cream-200/80 font-medium">· Feature Preview</span>
+                  <span className="text-xs text-rose-200/80 font-medium">· Feature Preview</span>
                 </div>
 
                 <h4 className="mt-3 font-display text-2xl sm:text-3xl font-bold text-white flex items-center gap-2">
@@ -307,16 +307,16 @@ export function ConnectAppGiftSection() {
                   {selectedFeature.summary}
                 </p>
 
-                <p className="mt-2 font-body text-xs sm:text-sm text-cream-200/80 leading-relaxed">
+                <p className="mt-2 font-body text-xs sm:text-sm text-rose-100/80 leading-relaxed font-normal">
                   {selectedFeature.details}
                 </p>
               </div>
 
               {/* Interactive Simulator Trigger */}
-              <div className="rounded-2xl bg-white/10 border border-white/15 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="rounded-2xl bg-white/10 border border-white/20 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div className="text-center sm:text-left">
                   <p className="text-xs font-bold text-white">Live Feature Simulator</p>
-                  <p className="text-[11px] text-cream-200/80">
+                  <p className="text-[11px] text-rose-200/90 font-medium">
                     {activeTab === 'heartbeat'
                       ? 'Tap the button to test live haptic heartbeat pulse'
                       : 'Simulate live action in Aanya & Me'}
@@ -335,7 +335,7 @@ export function ConnectAppGiftSection() {
 
             {/* Right Column: Sleek Smartphone Bezel Preview */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-64 sm:w-72 rounded-[2.5rem] bg-[#120d12] p-3 shadow-2xl ring-4 ring-white/20 border border-rose-500/40 relative">
+              <div className="w-64 sm:w-72 rounded-[2.5rem] bg-[#120510] p-3 shadow-2xl ring-4 ring-white/20 border border-rose-500/40 relative">
                 {/* Phone Speaker & Dynamic Island */}
                 <div className="w-24 h-4 bg-black rounded-full mx-auto mb-3 flex items-center justify-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-rose-500/60 animate-pulse" />
@@ -343,7 +343,7 @@ export function ConnectAppGiftSection() {
                 </div>
 
                 {/* Simulated Screen Content */}
-                <div className="rounded-[1.8rem] bg-[#1a1218] border border-white/15 p-4 flex flex-col gap-3 min-h-[320px] justify-between text-left">
+                <div className="rounded-[1.8rem] bg-[#220a1f] border border-white/15 p-4 flex flex-col gap-3 min-h-[320px] justify-between text-left">
                   {/* Screen Header */}
                   <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                     <div>
@@ -367,7 +367,7 @@ export function ConnectAppGiftSection() {
                       {pulseActive && (
                         <div className="absolute inset-0 rounded-full bg-rose-400/50 animate-ping" />
                       )}
-                      <div className="w-full h-full rounded-full bg-[#1a1218] flex items-center justify-center text-3xl">
+                      <div className="w-full h-full rounded-full bg-[#180716] flex items-center justify-center text-3xl">
                         {selectedFeature.screenEmoji}
                       </div>
                     </div>
@@ -375,7 +375,7 @@ export function ConnectAppGiftSection() {
                     <p className="mt-3 text-xs font-bold text-white">
                       {selectedFeature.screenTitle}
                     </p>
-                    <p className="mt-1 text-[10px] text-cream-100/80 max-w-[200px] leading-tight font-medium">
+                    <p className="mt-1 text-[10px] text-cream-100/90 max-w-[200px] leading-tight font-medium">
                       {selectedFeature.screenSubtitle}
                     </p>
                   </div>
