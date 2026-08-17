@@ -25,6 +25,7 @@ import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { ScratchOverlay } from '@/components/ScratchCard';
 import { ThreeDTulipExperience } from '@/components/ThreeDTulipExperience';
 import { StorybookModal } from '@/components/StorybookModal';
+import { ConnectAppGiftSection } from '@/components/ConnectAppGiftSection';
 
 type LuckyStage = 'idle' | 'rolling' | 'revealed';
 
@@ -216,6 +217,14 @@ export function GiftsPage() {
               >
                 <span>🤖</span>
                 <span>Gift B: Offline AI</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => document.getElementById('gift-app')?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-rose-500/20 to-purple-500/20 backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-rose-700 border border-rose-400/60 hover:bg-rose-500 hover:text-white transition-all shadow-sm cursor-pointer"
+              >
+                <span>📱</span>
+                <span>Special Gift: Aanya &amp; Me App</span>
               </button>
               <button
                 type="button"
@@ -510,6 +519,9 @@ export function GiftsPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── SPECIAL GIFT: Aanya & Me — Our Private Couple App ─── */}
+      <ConnectAppGiftSection />
 
       {/* ─── GIFT C: Something you've wanted forever — Living Time Capsule ─── */}
       <section id="gift-c" className="px-6 pb-16 scroll-mt-28">
