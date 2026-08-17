@@ -6,6 +6,7 @@ export function ThreeDTulipExperience() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [currentPetalsCount, setCurrentPetalsCount] = useState(6);
   const [manualDetachedCount, setManualDetachedCount] = useState(0);
+  const lastPetalsCountRef = useRef(6);
 
   const pluckNextPetalRef = useRef<() => void>(() => {});
   const resetBloomRef = useRef<() => void>(() => {});
@@ -30,7 +31,7 @@ export function ThreeDTulipExperience() {
       powerPreference: 'high-performance',
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.3;
     container.appendChild(renderer.domElement);
@@ -403,7 +404,10 @@ export function ThreeDTulipExperience() {
         }
       });
 
-      setCurrentPetalsCount(remainingCount);
+      if (lastPetalsCountRef.current !== remainingCount) {
+        lastPetalsCountRef.current = remainingCount;
+        setCurrentPetalsCount(remainingCount);
+      }
 
       // ─── Drifting Petals ───
       floatingPetals.forEach((fp) => {
