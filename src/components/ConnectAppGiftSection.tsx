@@ -139,6 +139,54 @@ export function ConnectAppGiftSection() {
           </p>
         </div>
 
+        {/* Featured App Showcase Banner with real screenshot */}
+        <div className="mt-8 rounded-3xl bg-gradient-to-r from-rose-950 via-wine-900 to-purple-950 p-6 sm:p-8 border border-rose-400/50 shadow-2xl text-white flex flex-col md:flex-row items-center gap-6 sm:gap-8 relative overflow-hidden">
+          <div className="relative shrink-0 flex items-center justify-center">
+            <div className="absolute inset-0 bg-rose-500/30 rounded-3xl blur-xl animate-pulse" />
+            <img
+              src="/app.png"
+              alt="Aanya & Me App Icon on Home Screen"
+              className="relative w-44 sm:w-52 h-auto rounded-2xl shadow-2xl border-2 border-white/20 object-contain hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+
+          <div className="flex-1 text-center md:text-left flex flex-col justify-between gap-3">
+            <span className="inline-flex items-center justify-center md:justify-start gap-1.5 px-3 py-1 rounded-full bg-rose-500/30 border border-rose-400/50 text-[11px] font-bold text-rose-200 w-fit mx-auto md:mx-0">
+              <Sparkles className="w-3.5 h-3.5 text-rose-300" />
+              Your Own Personal Mobile Application
+            </span>
+
+            <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Your Picture on Your Home Screen! ❤️
+            </h3>
+
+            <p className="font-body text-sm sm:text-base text-cream-100/90 leading-relaxed font-medium">
+              Your very own mobile app sitting right on your home screen with your photo as the icon. Download this and enjoy <b>one-click connect</b>, instant notifications, and easy message passing anytime!
+            </p>
+
+            <div className="mt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <a
+                href="/app-debug.apk"
+                download="Aanya-and-Me.apk"
+                className="py-2.5 px-5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-xs shadow-md shadow-rose-500/40 flex items-center gap-2 transition-all cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download App Now</span>
+              </a>
+
+              <a
+                href="https://aanya-and-me.pages.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-2.5 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all border border-white/20"
+              >
+                <Globe className="w-3.5 h-3.5 text-rose-300" />
+                <span>Or Open Web Version</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Personal Handwritten Letter Box with high-contrast text */}
         <div className="mt-8 rounded-3xl bg-white/90 backdrop-blur-md p-6 sm:p-8 border border-rose-200 shadow-soft relative overflow-hidden">
           <div className="flex items-center gap-3 mb-3">
