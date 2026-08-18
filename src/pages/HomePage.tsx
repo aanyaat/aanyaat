@@ -10,6 +10,7 @@ import { ConfettiOverlay } from '@/components/ConfettiOverlay';
 import { ThreeDPhotoExperience } from '@/components/ThreeDPhotoExperience';
 import { PWAInstallPrompt } from '@/components/PWAInstallPrompt';
 import { StorybookModal } from '@/components/StorybookModal';
+import { CinematicScrollOdyssey } from '@/components/CinematicScrollOdyssey';
 
 export function HomePage() {
   const cd = useCountdown(person.birthday);
@@ -55,92 +56,12 @@ export function HomePage() {
       {/* ─── 3D PHOTO EXPERIENCE BACKGROUND LAYER ─── */}
       <ThreeDPhotoExperience />
 
-      {/* ─── HERO WITH 3D ORBITING PHOTOS ─── */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
-        {/* Soft atmospheric gradient to give depth while keeping 3D photos visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-wine-950/40 via-transparent to-wine-950/60 pointer-events-none" />
-
-        {/* Hero Content */}
-        <div className="relative z-10 mx-auto max-w-3xl px-6 py-28 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <span className="chip animate-fade-in bg-white/50 text-wine-900 backdrop-blur-2xl border border-white/70 shadow-soft">
-              <Sparkles className="h-3.5 w-3.5 text-gold-600 animate-spin" style={{ animationDuration: '6s' }} />
-              A surprise for the birthday queen
-            </span>
-          </div>
-
-          <h1 className="mt-6 animate-fade-up font-display text-5xl font-bold leading-[1.08] text-wine-950 drop-shadow-sm sm:text-7xl tracking-tight">
-            Happy Birthday,
-            <br />
-            <span className="text-gradient-rose text-glow-rose">{person.name}</span>
-          </h1>
-
-          <p
-            className="mx-auto mt-6 max-w-xl animate-fade-up font-body text-lg leading-relaxed text-wine-900/90 sm:text-xl font-medium"
-            style={{ animationDelay: '0.15s' }}
-          >
-            {person.nickname}, a simple birthday message wasn't enough. So I built
-            this — every page, every word, for you. Wander around, take your time, and
-            let me tell you all the things I don't always say out loud.
-          </p>
-
-          <div
-            className="mt-8 animate-fade-up"
-            style={{ animationDelay: '0.3s' }}
-          >
-            <CountdownDisplay cd={cd} />
-          </div>
-
-          <div
-            className="mt-8 flex animate-fade-up flex-wrap items-center justify-center gap-3"
-            style={{ animationDelay: '0.45s' }}
-          >
-            <button
-              onClick={() => {
-                fire(120);
-                navigate('/about');
-              }}
-              className="btn-primary shadow-soft cursor-pointer text-sm font-semibold tracking-wide"
-            >
-              Start the tour
-              <ArrowRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => {
-                setIsStorybookOpen(true);
-                fire(60);
-              }}
-              className="btn-ghost bg-white/75 text-wine-900 border-white/80 hover:bg-white backdrop-blur-xl shadow-soft cursor-pointer flex items-center gap-2 text-sm font-semibold"
-            >
-              <BookOpen className="h-4 w-4 text-rose-500" />
-              Our Storybook Keepsake
-            </button>
-            <button
-              onClick={() => fire(80)}
-              className="btn-ghost bg-white/60 text-wine-900 border-white/70 hover:bg-white/90 backdrop-blur-xl shadow-soft cursor-pointer text-sm font-semibold"
-            >
-              <Sparkles className="h-4 w-4 text-gold-600" />
-              Throw confetti
-            </button>
-          </div>
-
-          {!cd.isToday && (
-            <div className="mt-8 animate-fade-in">
-              <span className="inline-block rounded-full bg-white/75 backdrop-blur-xl px-5 py-2 font-body text-xs text-wine-900 font-semibold border border-white/80 shadow-soft">
-                Countdown to {person.birthDateDisplay} — your day is almost here! ✨
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-          <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-wine-400/40 p-1 backdrop-blur-sm bg-white/20">
-            <span className="h-2.5 w-1 animate-float rounded-full bg-rose-500" />
-          </div>
-        </div>
-      </section>
-
+      {/* ─── CINEMATIC SCROLL-DRIVEN ODYSSEY (REFERENCE CHOREOGRAPHY) ─── */}
+      <CinematicScrollOdyssey
+        cd={cd}
+        fire={fire}
+        onOpenStorybook={() => setIsStorybookOpen(true)}
+      />
       {/* ─── PREVIEW CARDS (FROSTED GLASS ON TOP OF 3D PHOTOS) ─── */}
       <section ref={previewRef} className="relative pb-16 z-10">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
