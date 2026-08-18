@@ -62,6 +62,7 @@ export function HomePage() {
         fire={fire}
         onOpenStorybook={() => setIsStorybookOpen(true)}
       />
+
       {/* ─── PREVIEW CARDS (FROSTED GLASS ON TOP OF 3D PHOTOS) ─── */}
       <section ref={previewRef} className="relative pb-16 z-10">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
