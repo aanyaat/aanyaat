@@ -55,10 +55,16 @@ export default {
         'rose-radial': 'radial-gradient(circle at 50% 0%, rgba(249,79,115,0.16), transparent 60%)',
         'gold-radial': 'radial-gradient(circle at 50% 0%, rgba(232,182,42,0.18), transparent 55%)',
       },
+      transitionTimingFunction: {
+        'cinematic': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+      },
       boxShadow: {
-        soft: '0 10px 40px -12px rgba(94, 34, 54, 0.25)',
+        soft: '0 10px 40px -12px rgba(94, 34, 54, 0.22)',
         glow: '0 0 40px -8px rgba(232, 182, 42, 0.5)',
-        card: '0 18px 50px -20px rgba(74, 24, 48, 0.4)',
+        'glow-rose': '0 0 40px -6px rgba(249, 79, 115, 0.45)',
+        card: '0 18px 50px -20px rgba(74, 24, 48, 0.35)',
+        'glass-lift': '0 20px 45px -15px rgba(74, 24, 48, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.8)',
       },
       keyframes: {
         'fade-up': {

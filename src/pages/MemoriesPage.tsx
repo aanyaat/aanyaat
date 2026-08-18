@@ -51,12 +51,13 @@ export function MemoriesPage() {
 
   // --- Fetching from Supabase on load if available ---
   useEffect(() => {
-    if (!supabase) return;
+    const client = supabase;
+    if (!client) return;
 
     const loadData = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
+        const { data, error } = await client
           .from('shared_memories')
           .select('*')
           .order('created_at', { ascending: true });

@@ -23,29 +23,29 @@ export function WishesPage() {
         </div>
       </section>
 
-      <section className="px-6 pb-12">
+      <section className="px-4 sm:px-6 pb-12">
         <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2">
           {wishes.map((w, i) => (
             <article
               key={w.title}
-              className="reveal group relative overflow-hidden rounded-3xl bg-white p-7 shadow-soft transition-all duration-500 hover:-translate-y-1 hover:shadow-card sm:p-8"
+              className="reveal group relative overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl p-7 shadow-soft border border-white/80 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-card hover:bg-white/85 sm:p-8"
               style={{ transitionDelay: `${i * 40}ms` }}
             >
-              <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-rose-100/50 blur-2xl transition-all duration-500 group-hover:bg-rose-200/60" />
+              <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-rose-200/40 blur-2xl transition-all duration-500 group-hover:bg-rose-300/50 pointer-events-none" />
               <div className="relative flex items-start gap-4">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft transition-transform duration-300 group-hover:scale-105">
                   <w.icon className="h-6 w-6" />
                 </span>
                 <div>
-                  <h3 className="font-display text-xl font-semibold leading-snug text-wine-700">
+                  <h3 className="font-display text-xl font-semibold leading-snug text-wine-800">
                     {w.title}
                   </h3>
-                  <p className="mt-3 font-body text-base leading-relaxed text-wine-500/90">
+                  <p className="mt-3 font-body text-base leading-relaxed text-wine-600/90">
                     {w.body}
                   </p>
                 </div>
               </div>
-              <Quote className="absolute bottom-5 right-5 h-8 w-8 text-rose-200/70" />
+              <Quote className="absolute bottom-5 right-5 h-8 w-8 text-rose-200/60 transition-colors group-hover:text-rose-300/70" />
             </article>
           ))}
         </div>

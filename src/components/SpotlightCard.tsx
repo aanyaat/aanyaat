@@ -69,7 +69,7 @@ export function SpotlightCard({ item, index, onClick }: SpotlightCardProps) {
       }}
       className={[
         'reveal group relative cursor-pointer overflow-hidden rounded-3xl bg-white p-3.5 pb-5 sm:p-4 sm:pb-6 shadow-soft transition-all duration-300 hover:shadow-card ring-1 ring-rose-100/70',
-        item.span ? 'col-span-2 row-span-2' : 'col-span-1',
+        (item as { span?: boolean }).span ? 'col-span-2 row-span-2' : 'col-span-1',
       ].join(' ')}
     >
       {/* ReactBits Dynamic Radial Spotlight Glow */}

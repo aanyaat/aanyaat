@@ -103,18 +103,18 @@ export function AboutPage() {
             subtitle="The story of how you quietly became my whole day, my routine, and my family."
           />
         </div>
-        <div className="mx-auto max-w-3xl mt-12 space-y-5">
+        <div className="mx-auto max-w-3xl mt-12 space-y-4 sm:space-y-5">
           {(showAllBeats ? storyBeats : storyBeats.slice(0, 4)).map((beat, i) => (
             <div
               key={i}
-              className="reveal rounded-3xl bg-white p-6 shadow-soft transition-all duration-500 hover:shadow-card sm:p-7"
-              style={{ transitionDelay: `${i * 60}ms` }}
+              className="reveal rounded-3xl bg-white/70 backdrop-blur-xl p-6 shadow-soft border border-white/80 transition-all duration-500 hover:shadow-card hover:bg-white/85 hover:-translate-y-1 sm:p-7"
+              style={{ transitionDelay: `${i * 40}ms` }}
             >
               <div className="flex items-start gap-4">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-rose-500 text-white shadow-soft">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 text-white shadow-soft">
                   <beat.icon className="h-5 w-5" />
                 </span>
-                <p className="font-body text-base leading-relaxed text-wine-600 sm:text-lg">
+                <p className="font-body text-base leading-relaxed text-wine-800 sm:text-lg">
                   {beat.text}
                 </p>
               </div>
@@ -122,9 +122,9 @@ export function AboutPage() {
           ))}
 
           {!showAllBeats && (
-            <div className="text-center">
-              <button onClick={() => setShowAllBeats(true)} className="btn-ghost">
-                <ArrowRight className="h-4 w-4" />
+            <div className="text-center pt-2">
+              <button onClick={() => setShowAllBeats(true)} className="btn-ghost bg-white/70 border-white/80 shadow-soft text-wine-800 hover:bg-white font-semibold">
+                <ArrowRight className="h-4 w-4 text-rose-500" />
                 Keep reading…
               </button>
             </div>

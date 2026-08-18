@@ -25,11 +25,11 @@ export function Nav() {
       className={[
         'fixed inset-x-0 top-0 z-40 transition-all duration-500',
         scrolled
-          ? 'bg-cream-50/85 backdrop-blur-xl shadow-soft'
-          : 'bg-transparent',
+          ? 'bg-cream-50/80 backdrop-blur-2xl shadow-soft border-b border-white/60 py-1'
+          : 'bg-transparent py-2',
       ].join(' ')}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 sm:px-8">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2.5 sm:px-8">
         <button
           onClick={() => go('/')}
           className="group flex items-center gap-2.5"

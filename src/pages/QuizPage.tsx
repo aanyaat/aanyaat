@@ -131,8 +131,8 @@ export function QuizPage() {
                 </div>
               </div>
 
-              <div key={idx} className="reveal rounded-3xl bg-white p-7 shadow-soft sm:p-9 animate-fade-up">
-                <h3 className="font-display text-2xl font-semibold text-wine-700">
+              <div key={idx} className="reveal rounded-3xl bg-white/75 backdrop-blur-xl p-7 shadow-soft border border-white/80 sm:p-9 animate-fade-up">
+                <h3 className="font-display text-2xl font-semibold text-wine-800">
                   {q.question}
                 </h3>
                 <div className="mt-6 grid gap-3">
@@ -148,30 +148,30 @@ export function QuizPage() {
                         className={[
                           'group flex items-center justify-between rounded-2xl border-2 px-5 py-4 text-left font-body text-base transition-all duration-300',
                           show && isAnswer
-                            ? 'border-emerald-400 bg-emerald-50 text-emerald-700'
+                            ? 'border-emerald-400 bg-emerald-50/90 text-emerald-800 font-semibold shadow-sm'
                             : show && isPicked && !isAnswer
-                              ? 'border-rose-400 bg-rose-50 text-rose-700'
-                              : 'border-rose-100 bg-white text-wine-700 hover:border-rose-300 hover:bg-rose-50',
+                              ? 'border-rose-400 bg-rose-50/90 text-rose-800 font-medium'
+                              : 'border-rose-100/70 bg-white/80 text-wine-800 hover:border-rose-300 hover:bg-rose-50/60 hover:-translate-y-0.5 shadow-sm',
                           phase === 'answered' ? 'cursor-default' : 'cursor-pointer',
                         ].join(' ')}
                       >
                         <span>{opt}</span>
-                        {show && isAnswer && <Check className="h-5 w-5 text-emerald-500" />}
-                        {show && isPicked && !isAnswer && <X className="h-5 w-5 text-rose-500" />}
+                        {show && isAnswer && <Check className="h-5 w-5 text-emerald-600 stroke-[2.5]" />}
+                        {show && isPicked && !isAnswer && <X className="h-5 w-5 text-rose-600 stroke-[2.5]" />}
                       </button>
                     );
                   })}
                 </div>
 
                 {phase === 'answered' && (
-                  <div className="mt-6 animate-fade-up rounded-2xl bg-cream-100 p-5">
-                    <p className="font-body text-base leading-relaxed text-wine-600">
+                  <div className="mt-6 animate-fade-up rounded-2xl bg-rose-50/80 border border-rose-100 p-5">
+                    <p className="font-body text-base leading-relaxed text-wine-700">
                       <span className="font-display font-semibold text-rose-600">
                         {picked === q.answer ? 'You got it. ' : 'Close — '}
                       </span>
                       {q.story}
                     </p>
-                    <button onClick={next} className="btn-primary mt-5">
+                    <button onClick={next} className="btn-primary mt-5 text-xs uppercase tracking-wider font-semibold">
                       {idx + 1 >= quiz.length ? 'See my score' : 'Next question'}
                       <ArrowRight className="h-4 w-4" />
                     </button>
@@ -180,7 +180,7 @@ export function QuizPage() {
               </div>
             </>
           ) : (
-            <div className="rounded-3xl bg-white p-9 text-center shadow-card">
+            <div className="rounded-3xl bg-white/80 backdrop-blur-xl p-9 text-center shadow-card border border-white/80">
               <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-rose-400 to-gold-400 text-white shadow-glow">
                 <PartyPopper className="h-10 w-10" />
               </div>
